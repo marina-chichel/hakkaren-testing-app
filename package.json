@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "cypress open",
+    "test": "concurrently \"node server.js\" \"vite\" \"cypress open\"",
+    "cypress:open": "cypress open",
     "server": "nodemon server.js"
   },
   "dependencies": {
@@ -25,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
     "cypress": "^13.6.4",
     "eslint": "^8.56.0",
     "eslint-plugin-react-hooks": "^4.6.0",
