@@ -1,0 +1,57 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4px;
+}
+
+.box {
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.h-stack {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+}
+
+button {
+  width: fit-content;
+  align-self: center;
+}
+
+textarea,
+input {
+  width: 100%;
+}
+
+.error {
+  color: red;
+  border: 1px solid rgb(225, 23, 120);
+  width: fit-content;
+  align-self: center;
+  padding: 12px;
+}
+
+.success {
+  color: rgb(79, 133, 25);
+  border: 1px solid rgb(95, 237, 19);
+  width: fit-content;
+  align-self: center;
+  padding: 12px;
+}
+
+ol {
+  max-height: 200px;
+  overflow-y: scroll;
+}
