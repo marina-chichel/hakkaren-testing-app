@@ -9,6 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "concurrently \"node server.js\" \"vite\" \"cypress open\"",
+    "test:run": "concurrently \"node server.js\" \"vite\" \"cypress run\"",
     "cypress:open": "cypress open",
     "server": "nodemon server.js"
   },
