@@ -11,7 +11,6 @@ describe("Test Hakkaren API", () => {
 
     cy.get("li").should("have.length", 0);
     cy.contains("Get users").click();
-    cy.get("li").should("have.length.greaterThan", 0);
 
     cy.get("#auth-token").type(
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWNiOGZmN2MwNGVkYWY3OGZjZjQ3ZGQiLCJpYXQiOjE3MDgzNjM1MDQsImV4cCI6MTcwODQ0OTkwNH0.PdPb3knV0AnBNrK-OSGjLFj9OAJij_62j-BPSvE8frg"
@@ -29,5 +28,34 @@ describe("Test Hakkaren API", () => {
       cy.contains("Get users").click();
       cy.get("ol").children().should("have.length.greaterThan", usersNumber);
     });
+  });
+
+  it("Check the RESET endpoint", () => {
+    cy.get("li").should("have.length.greaterThan", 0);
+
+    cy.get("#url").type(
+      "https://api.dev.hakkaren.lastingdynamics.net/v1/projects/65d2491ea58ff498cf919814/databases/reset"
+    );
+    cy.get("#method").select("PUT");
+    // _________________________________________________
+    // cy.get("#payload").type(`{ "resetTo": "initial" }`, {
+    //   parseSpecialCharSequences: false,
+    // });
+    // cy.contains("Execute").click();
+
+    // cy.get("ol").then(($list) => {
+    //   const usersNumber = $list.children().length;
+    //   cy.contains("Get users").click();
+    //   cy.get("ol").children().should("not.have.length", usersNumber);
+    // });
+    // _________________________________________________
+
+    cy.get("#payload").clear().type(`{ "resetTo": "empty" }`, {
+      parseSpecialCharSequences: false,
+    });
+    cy.contains("Execute").click();
+
+    cy.contains("Get users").click();
+    cy.get("ol").children().should("have.length", 0);
   });
 });
