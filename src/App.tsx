@@ -1,24 +1,22 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./App.css";
 
+type User = {
+  email: string;
+};
+
 function App() {
-  const [dbConnectionURI, setDbConnectionURI] = useState(
-    "mongodb://65cb8ff7c04edaf78fcf47dd_65d2491ea58ff498cf919814_user:81pNkHM%7D-1ts@167.235.55.35:30558/65cb8ff7c04edaf78fcf47dd_65d2491ea58ff498cf919814?authSource=admin"
-  );
+  const [dbConnectionURI, setDbConnectionURI] = useState("");
   const [dbConnected, setDbConnected] = useState(false);
 
-  const [url, setUrl] = useState(
-    "https://api.dev.hakkaren.lastingdynamics.net/v1/inceptors/65d24924a58ff498cf919c4e/execute"
-  );
+  const [url, setUrl] = useState("");
 
   const [method, setMethod] = useState("POST");
-  const [authToken, setAuthToken] = useState(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWNiOGZmN2MwNGVkYWY3OGZjZjQ3ZGQiLCJpYXQiOjE3MDgyNzU0NTcsImV4cCI6MTcwODM2MTg1N30._-tKtPjASW2W5C4n6exqldHwOiMDcN157QsBhVvqI0o"
-  );
+  const [authToken, setAuthToken] = useState("");
   const [payload, setPayload] = useState("");
   const [responseData, setResponseData] = useState("");
   const [error, setError] = useState("");
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   const connectDB = async () => {
     if (!dbConnectionURI) {
@@ -78,8 +76,9 @@ function App() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
         },
-        body: method !== "GET" && payload ? JSON.stringify(payload) : null,
+        body: method !== "GET" && payload ? `${payload}` : null,
       });
+
       const responseBody = await response.json();
       console.log("Response Body:", responseBody);
 
@@ -114,16 +113,25 @@ function App() {
         {dbConnected && (
           <>
             <div className="success"> DB is connected</div>
-            <button onClick={getUsers}>get users</button>
-            <h2>Users ({users.length})</h2>
-            <ol>
+            <button onClick={getUsers}>Get users</button>
+            <h2>Users - {users.length} </h2>
+            <ol id="user-list">
               {users.map((user, index) => (
                 <li key={index}>{user.email}</li>
               ))}
             </ol>
           </>
         )}
-
+        <div className="h-stack">
+          <label htmlFor="auth-token">AuthToken:</label>
+          <input
+            id="auth-token"
+            type="text"
+            value={authToken}
+            onChange={(e) => setAuthToken(e.target.value)}
+            placeholder="Enter Authentication Token"
+          />
+        </div>
         <div className="h-stack">
           <label htmlFor="url">URL:</label>
           <input
@@ -146,16 +154,6 @@ function App() {
         </div>
 
         <div className="h-stack">
-          <label htmlFor="auth-token">AuthToken:</label>
-          <input
-            id="auth-token"
-            type="text"
-            value={authToken}
-            onChange={(e) => setAuthToken(e.target.value)}
-            placeholder="Enter Authentication Token"
-          />
-        </div>
-        <div className="h-stack">
           <label htmlFor="payload">Payload:</label>
           <textarea
             id="payload"
@@ -172,6 +170,7 @@ function App() {
         <div className="h-stack">
           <h2>Response:</h2>
           <textarea
+            id="responce"
             readOnly
             value={responseData}
             placeholder="Response will appear here"
