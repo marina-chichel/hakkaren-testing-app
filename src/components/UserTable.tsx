@@ -63,7 +63,7 @@ const NameContainer = styled(Box)(() => ({
 
 const NameInitialsContainer = styled(Box)(({ theme }) => ({
   display: "flex",
-  width: 40,
+  minWidth: 40,
   height: 40,
   padding: 4,
   backgroundColor: "#605DEC",

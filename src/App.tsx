@@ -1,16 +1,25 @@
-import { Box, Container, Typography } from "@mui/material";
-import UserTable from "./components/UserTable";
+import { Box } from "@mui/material";
+import Logo from "./assets/logo.svg";
+import Users from "./components/Users";
 
 function App() {
   return (
-    <Container maxWidth="xl">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-          Tests
-        </Typography>
-        <UserTable />
+    <Box>
+      <Box
+        sx={{
+          py: 3,
+          px: 6,
+          bgcolor: "#F9F9F9",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <img src={Logo} />
       </Box>
-    </Container>
+      <Box sx={{ py: 4, px: 6 }}>
+        <Users />
+      </Box>
+    </Box>
   );
 }
 
