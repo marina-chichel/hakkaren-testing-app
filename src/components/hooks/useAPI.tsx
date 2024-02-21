@@ -4,7 +4,7 @@ type User = {
   email: string;
 };
 
-const useTesting = () => {
+const useAPI = () => {
   const [dbConnectionURI, setDbConnectionURI] = useState("");
   const [dbConnected, setDbConnected] = useState(false);
 
@@ -122,4 +122,4 @@ const useTesting = () => {
   };
 };
 
-export default useTesting;
+export default useAPI;
