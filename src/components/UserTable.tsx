@@ -1,5 +1,6 @@
 import {
   Box,
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -57,9 +58,23 @@ const getInitials = (name: string) => {
 type UserTableParams = {
   users: User[];
   deleteUser: (serId: string) => void;
+  isFetching: boolean;
 };
 
-const UserTable = ({ users, deleteUser }: UserTableParams) => {
+const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
+  if (isFetching)
+    return (
+      <Box
+        display="flex"
+        width="100%"
+        height="160px"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <CircularProgress size={48} />
+      </Box>
+    );
+
   if (users.length === 0) return <EmptyTable />;
 
   return (

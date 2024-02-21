@@ -30,10 +30,15 @@ const resetURL =
   "https://api.dev.hakkaren.lastingdynamics.net/v1/projects/65d4958a6efd64dc8283a927/databases/reset";
 
 const useAPI = () => {
+  const [isFetching, setIsFetching] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
+
   const [error, setError] = useState("");
   const [users, setUsers] = useState<User[]>([]);
 
   const connectDB = async () => {
+    setIsFetching(true);
     try {
       setError("");
       const response = await fetch("http://localhost:3000/connect-to-mongodb", {
@@ -49,10 +54,12 @@ const useAPI = () => {
     } catch (error) {
       setError("Error connecting to MongoDB");
       console.error("Error connecting to MongoDB from client:", error);
+      setIsFetching(false);
     }
   };
   const getUsers = async () => {
     setError("");
+    setIsFetching(true);
     try {
       const response = await fetch("http://localhost:3000", {
         method: "GET",
@@ -80,6 +87,8 @@ const useAPI = () => {
     } catch (error) {
       setError("Couldn't fetch users");
       setUsers([]);
+    } finally {
+      setIsFetching(false);
     }
   };
   useEffect(() => {
@@ -88,6 +97,7 @@ const useAPI = () => {
 
   const handleGenerate = async () => {
     setError("");
+    setIsGenerating(true);
     try {
       const response = await fetch(executeURL, {
         method: "POST",
@@ -109,10 +119,13 @@ const useAPI = () => {
     } catch (error) {
       console.error("Error:", error);
       setError("An error occurred while making the request");
+    } finally {
+      setIsGenerating(false);
     }
   };
   const handleReset = async () => {
     setError("");
+    setIsResetting(true);
     try {
       const response = await fetch(resetURL, {
         method: "PUT",
@@ -136,6 +149,8 @@ const useAPI = () => {
     } catch (error) {
       console.error("Error:", error);
       setError("An error occurred while making the request");
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -151,6 +166,9 @@ const useAPI = () => {
     deleteUser,
     error,
     connectDB,
+    isFetching,
+    isGenerating,
+    isResetting,
   };
 };
 

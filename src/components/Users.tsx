@@ -1,10 +1,19 @@
-import { Box, Button, Snackbar } from "@mui/material";
+import { Box, Button, CircularProgress, Snackbar } from "@mui/material";
 import UserTable from "./UserTable";
 import useAPI from "./hooks/useAPI";
 
 function Users() {
-  const { handleGenerate, handleReset, users, deleteUser, error, connectDB } =
-    useAPI();
+  const {
+    handleGenerate,
+    handleReset,
+    users,
+    deleteUser,
+    error,
+    connectDB,
+    isFetching,
+    isGenerating,
+    isResetting,
+  } = useAPI();
 
   return (
     <Box>
@@ -15,6 +24,13 @@ function Users() {
           sx={{ textTransform: "none", borderRadius: "8px" }}
           onClick={handleGenerate}
         >
+          {isGenerating && (
+            <CircularProgress
+              color="secondary"
+              size={20}
+              sx={{ marginRight: "10px" }}
+            />
+          )}
           Generate Data
         </Button>
         <Button
@@ -23,10 +39,24 @@ function Users() {
           sx={{ textTransform: "none", borderRadius: "8px" }}
           onClick={handleReset}
         >
+          {isResetting && (
+            <CircularProgress
+              color="secondary"
+              size={20}
+              thickness={4}
+              sx={{ marginRight: "10px" }}
+            />
+          )}
           Reset DB
         </Button>
       </Box>
-      <UserTable users={users} deleteUser={deleteUser} />
+
+      <UserTable
+        users={users}
+        deleteUser={deleteUser}
+        isFetching={isFetching}
+      />
+
       <Snackbar
         open={!!error}
         message={error}
