@@ -5,7 +5,15 @@ import Users from "./components/Users";
 function App() {
   return (
     <Box>
-      <Box sx={{ py: 3, px: 6, bgcolor: "#F9F9F9" }}>
+      <Box
+        sx={{
+          py: 3,
+          px: 6,
+          bgcolor: "#F9F9F9",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         <img src={Logo} />
       </Box>
       <Box sx={{ py: 4, px: 6 }}>
