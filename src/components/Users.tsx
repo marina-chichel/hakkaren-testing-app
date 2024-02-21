@@ -39,7 +39,7 @@ function Users() {
           color="error"
           sx={{ textTransform: "none", borderRadius: "8px" }}
           onClick={handleReset}
-          disabled={!!error || isGenerating}
+          disabled={!!error || isGenerating || users.length === 0}
         >
           {isResetting && (
             <CircularProgress
@@ -49,7 +49,7 @@ function Users() {
               sx={{ marginRight: "10px" }}
             />
           )}
-          Reset DB
+          Delete All
         </Button>
       </Box>
 
