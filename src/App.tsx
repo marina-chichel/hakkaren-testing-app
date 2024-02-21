@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
-import Logo from "./assets/logo.svg";
 import Users from "./components/Users";
+import { Person, Person2, Person2Outlined } from "@mui/icons-material";
 
 function App() {
   return (
@@ -14,7 +14,9 @@ function App() {
           alignItems: "center",
         }}
       >
-        <img src={Logo} />
+        <Person />
+        <Person2 />
+        <Person2Outlined />
       </Box>
       <Box sx={{ py: 4, px: 6 }}>
         <Users />
