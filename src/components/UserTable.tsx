@@ -1,5 +1,6 @@
 import {
   Box,
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -11,40 +12,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EmptyTable from "./EmptyTable";
-
-function createData(
-  name: string,
-  email: string,
-  language: string,
-  team: string,
-  date: string
-) {
-  return { name, email, language, team, date };
-}
-
-const rows = [
-  createData(
-    "Darrell Steward",
-    "nevaeh.simmons@example.com",
-    "English",
-    "Inferno Hawks",
-    "15 Jan. 2022"
-  ),
-  createData(
-    "Jacob Jones",
-    "dolores.chambers@example.com",
-    "Spanish",
-    "Phoenix Titans",
-    "15 Jan. 2022"
-  ),
-  createData(
-    "Kristin Watson",
-    "michael.mitc@example.com",
-    "French",
-    "Aurora Wolves",
-    "15 Jan. 2022"
-  ),
-];
+import { User } from "./hooks/useAPI";
 
 const TABLE_HEADERS = [
   "User",
@@ -84,11 +52,30 @@ const TablePaper = styled(Paper)(() => ({
 
 const getInitials = (name: string) => {
   const nameArr = name.split(" ");
-  return `${nameArr[0].charAt(0)}${nameArr[1]?.charAt(0)}`;
+  return `${nameArr[0].charAt(0)}${nameArr[1]?.charAt(0) || ""}`;
 };
 
-const UserTable = () => {
-  if (rows.length === 0) return <EmptyTable />;
+type UserTableParams = {
+  users: User[];
+  deleteUser: (serId: string) => void;
+  isFetching: boolean;
+};
+
+const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
+  if (isFetching)
+    return (
+      <Box
+        display="flex"
+        width="100%"
+        height="160px"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <CircularProgress size={48} />
+      </Box>
+    );
+
+  if (users.length === 0) return <EmptyTable />;
 
   return (
     <TableContainer component={TablePaper}>
@@ -101,7 +88,7 @@ const UserTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {users.map((row) => (
             <TableRow
               key={row.name}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -119,7 +106,11 @@ const UserTable = () => {
               <TableCell align="left">{row.team}</TableCell>
               <TableCell align="left">{row.date}</TableCell>
               <TableCell align="left">
-                <DeleteRowIcon />
+                <DeleteRowIcon
+                  onClick={() => {
+                    deleteUser(row.id);
+                  }}
+                />
               </TableCell>
             </TableRow>
           ))}
