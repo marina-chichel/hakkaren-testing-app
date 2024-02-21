@@ -92,7 +92,7 @@ const UserTable = () => {
 
   return (
     <TableContainer component={TablePaper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table>
         <TableHead>
           <TableRow>
             {TABLE_HEADERS.map((value, key) => (
