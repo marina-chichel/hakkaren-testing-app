@@ -23,6 +23,7 @@ function Users() {
           color="primary"
           sx={{ textTransform: "none", borderRadius: "8px" }}
           onClick={handleGenerate}
+          disabled={!!error || isResetting}
         >
           {isGenerating && (
             <CircularProgress
@@ -38,6 +39,7 @@ function Users() {
           color="error"
           sx={{ textTransform: "none", borderRadius: "8px" }}
           onClick={handleReset}
+          disabled={!!error || isGenerating}
         >
           {isResetting && (
             <CircularProgress
