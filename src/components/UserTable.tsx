@@ -76,6 +76,7 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
     );
 
   if (users.length === 0) return <EmptyTable />;
+  console.log(users);
 
   return (
     <TableContainer component={TablePaper}>
@@ -88,9 +89,9 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.map((row) => (
+          {users.map((row, index) => (
             <TableRow
-              key={row.name}
+              key={`${row.name}-${index}`}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">

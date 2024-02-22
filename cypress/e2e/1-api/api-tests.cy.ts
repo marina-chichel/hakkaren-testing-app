@@ -1,73 +1,66 @@
-const dbURI =
-  "mongodb://65cb8ff7c04edaf78fcf47dd_65d4958a6efd64dc8283a927_user:kLIwm*%3ElDD%23b@167.235.55.35:30558/65cb8ff7c04edaf78fcf47dd_65d4958a6efd64dc8283a927?authSource=admin";
-
-const authToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWNiOGZmN2MwNGVkYWY3OGZjZjQ3ZGQiLCJpYXQiOjE3MDgzNjM1MDQsImV4cCI6MTcwODQ0OTkwNH0.PdPb3knV0AnBNrK-OSGjLFj9OAJij_62j-BPSvE8frg";
-
-const resetURL =
-  "https://api.dev.hakkaren.lastingdynamics.net/v1/projects/65d4958a6efd64dc8283a927/databases/reset";
-
-const executeURL =
-  "https://api.dev.hakkaren.lastingdynamics.net/v1/inceptors/65d495c76efd64dc8283ad61/execute";
+import { resetURL, executeURL } from "../../../api-settings";
 
 describe("Test Hakkaren API", () => {
   beforeEach(() => {
+    cy.intercept("http://localhost:3000/connect-to-mongodb").as("connect");
+    cy.intercept("http://localhost:3000").as("fetch");
+    cy.intercept(executeURL).as("execute");
+    cy.intercept(resetURL).as("reset");
+
     cy.visit("/");
-    cy.get("#dbURI").type(dbURI);
-
-    cy.contains("DB is connected").should("not.exist");
-    cy.contains("Connect").click();
-    cy.contains("DB is connected").should("exist");
-
-    cy.get("li").should("have.length", 0);
-    cy.contains("Get users").click();
-
-    cy.get("#auth-token").type(authToken);
   });
 
-  it("Check the EXECUTE endpoint", () => {
-    cy.get("#url").type(executeURL);
-
-    cy.intercept(executeURL).as("execution");
-    cy.contains("Execute").click();
-    cy.wait("@execution");
-
-    cy.get("#responce").should("not.have.value", "");
-    cy.get("ol").then(($list) => {
-      const usersNumber = $list.children().length;
-      cy.contains("Get users").click();
-      cy.get("ol").children().should("have.length.greaterThan", usersNumber);
+  it("Fetch and Populate table", () => {
+    cy.wait("@connect");
+    cy.contains("Generate Data").should("not.be.disabled");
+    cy.wait("@fetch");
+    cy.get("body").then(($body) => {
+      if ($body.find("tbody").length > 0) {
+        cy.get("tbody").then(($table) => {
+          const usersNumber = $table.children().length;
+          cy.log(`${usersNumber} records found.`);
+          cy.contains("Generate Data").click();
+          cy.wait("@execute", { timeout: 30000 });
+          cy.wait("@fetch");
+          cy.get("tbody")
+            .children()
+            .should("have.length.greaterThan", usersNumber);
+        });
+      } else {
+        cy.log("No records found.");
+        cy.contains("Generate Data").click();
+        cy.wait("@execute", { timeout: 30000 });
+        cy.wait("@fetch");
+        cy.get("tbody").children().should("have.length.greaterThan", 0);
+      }
     });
+    cy.wait(2000);
   });
 
-  it("Check the RESET endpoint", () => {
-    cy.get("li").should("have.length.greaterThan", 0);
-
-    cy.get("#url").type(resetURL);
-    cy.get("#method").select("PUT");
-    // _________________________________________________
-    cy.get("#payload").type(`{ "resetTo": "initial" }`, {
-      parseSpecialCharSequences: false,
+  it("Delete single record", () => {
+    cy.wait(1000);
+    cy.get("tbody").then(($table) => {
+      const usersNumber = $table.children().length;
+      cy.log(`${cy.get('[data-testid="DeleteIcon"]')}`);
+      cy.get('[data-testid="DeleteIcon"]')
+        .first()
+        .click()
+        .then(() => {
+          cy.get("tbody")
+            .children()
+            .should("have.length", usersNumber - 1);
+        });
     });
+    cy.wait(2000);
+  });
 
-    cy.intercept(resetURL).as("execution");
-    cy.contains("Execute").click();
-    cy.wait("@execution");
-    cy.get("ol").then(($list) => {
-      const usersNumber = $list.children().length;
-      cy.contains("Get users").click();
-      cy.get("ol").children().should("not.have.length", usersNumber);
-    });
-    // _________________________________________________
-
-    cy.get("#payload").clear().type(`{ "resetTo": "empty" }`, {
-      parseSpecialCharSequences: false,
-    });
-    cy.contains("Execute").click();
-    cy.wait("@execution");
-
-    cy.contains("Get users").click();
-
-    cy.get("ol").children().should("have.length", 0);
+  it("Delete All records", () => {
+    cy.contains("Delete All").should("not.be.disabled");
+    cy.wait(2000);
+    cy.contains("Delete All").click();
+    cy.wait("@reset");
+    cy.wait("@fetch");
+    cy.get("tbody").should("not.exist");
+    cy.contains("NO RECORDS FOUND").should("exist");
   });
 });
