@@ -149,8 +149,7 @@ const useAPI = () => {
   };
 
   const deleteUser = (userId: string) => {
-    console.log(userId);
-    setUsers(users.filter((user) => user.id !== userId));
+    setUsers((curr) => curr.filter((user) => user.id !== userId));
   };
 
   return {
