@@ -32,7 +32,7 @@ function Users() {
               sx={{ marginRight: "10px" }}
             />
           )}
-          Generate Data
+          Fetch other users
         </Button>
         <Button
           variant="outlined"

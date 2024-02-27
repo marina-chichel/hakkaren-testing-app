@@ -75,49 +75,49 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
       </Box>
     );
 
-  if (users.length === 0) return <EmptyTable />;
-  console.log(users);
-
   return (
-    <TableContainer component={TablePaper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {TABLE_HEADERS.map((value, key) => (
-              <TableCell key={key}>{value}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {users.map((row, index) => (
-            <TableRow
-              key={`${row.name}-${index}`}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                <NameContainer>
-                  <NameInitialsContainer>
-                    {getInitials(row.name)}
-                  </NameInitialsContainer>
-                  {row.name}
-                </NameContainer>
-              </TableCell>
-              <TableCell align="left">{row.email}</TableCell>
-              <TableCell align="left">{row.language}</TableCell>
-              <TableCell align="left">{row.team}</TableCell>
-              <TableCell align="left">{row.date}</TableCell>
-              <TableCell align="left">
-                <DeleteRowIcon
-                  onClick={() => {
-                    deleteUser(row.id);
-                  }}
-                />
-              </TableCell>
+    <>
+      <TableContainer component={TablePaper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {TABLE_HEADERS.map((value, key) => (
+                <TableCell key={key}>{value}</TableCell>
+              ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {users.map((row, index) => (
+              <TableRow
+                key={`${row.name}-${index}`}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  <NameContainer>
+                    <NameInitialsContainer>
+                      {getInitials(row.name)}
+                    </NameInitialsContainer>
+                    {row.name}
+                  </NameContainer>
+                </TableCell>
+                <TableCell align="left">{row.email}</TableCell>
+                <TableCell align="left">{row.language}</TableCell>
+                <TableCell align="left">{row.team}</TableCell>
+                <TableCell align="left">{row.date}</TableCell>
+                <TableCell align="left">
+                  <DeleteRowIcon
+                    onClick={() => {
+                      deleteUser(row.id);
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {users.length === 0 && <EmptyTable />}
+    </>
   );
 };
 

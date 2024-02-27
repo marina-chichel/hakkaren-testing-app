@@ -17,14 +17,14 @@ describe("Test Hakkaren API", () => {
 
   it("Fetch and Populate table", () => {
     cy.wait("@connect");
-    cy.contains("Generate Data").should("not.be.disabled");
+    cy.contains("Fetch other users").should("not.be.disabled");
     cy.wait("@fetch");
     cy.get("body").then(($body) => {
       if ($body.find("tbody").length > 0) {
         cy.get("tbody").then(($table) => {
           const usersNumber = $table.children().length;
           cy.log(`${usersNumber} records found.`);
-          cy.contains("Generate Data").click();
+          cy.contains("Fetch other users").click();
           cy.wait("@execute", { timeout: 30000 });
           cy.wait("@fetch");
           cy.get("tbody")
@@ -33,7 +33,7 @@ describe("Test Hakkaren API", () => {
         });
       } else {
         cy.log("No records found.");
-        cy.contains("Generate Data").click();
+        cy.contains("Fetch other users").click();
         cy.wait("@execute", { timeout: 30000 });
         cy.wait("@fetch");
         cy.get("tbody").children().should("have.length.greaterThan", 0);
