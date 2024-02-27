@@ -51,6 +51,7 @@ const useAPI = () => {
       setIsFetching(false);
     }
   };
+
   const getUsers = async () => {
     setError("");
     setIsFetching(true);
@@ -85,6 +86,7 @@ const useAPI = () => {
       setIsFetching(false);
     }
   };
+
   useEffect(() => {
     connectDB();
   }, []);
@@ -117,6 +119,7 @@ const useAPI = () => {
       setIsGenerating(false);
     }
   };
+
   const handleReset = async () => {
     setError("");
     setIsResetting(true);

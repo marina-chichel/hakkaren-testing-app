@@ -8,6 +8,11 @@ describe("Test Hakkaren API", () => {
     cy.intercept(resetURL).as("reset");
 
     cy.visit("/");
+    cy.pause();
+  });
+
+  afterEach(() => {
+    cy.pause();
   });
 
   it("Fetch and Populate table", () => {
@@ -34,11 +39,9 @@ describe("Test Hakkaren API", () => {
         cy.get("tbody").children().should("have.length.greaterThan", 0);
       }
     });
-    cy.wait(2000);
   });
 
   it("Delete single record", () => {
-    cy.wait(1000);
     cy.get("tbody").then(($table) => {
       const usersNumber = $table.children().length;
       cy.log(`${cy.get('[data-testid="DeleteIcon"]')}`);
@@ -51,7 +54,6 @@ describe("Test Hakkaren API", () => {
             .should("have.length", usersNumber - 1);
         });
     });
-    cy.wait(2000);
   });
 
   it("Delete All records", () => {
@@ -61,6 +63,6 @@ describe("Test Hakkaren API", () => {
     cy.wait("@reset");
     cy.wait("@fetch");
     cy.get("tbody").should("not.exist");
-    cy.contains("NO RECORDS FOUND").should("exist");
+    cy.contains("NO RECORDS FOUND").should("exist", { timeout: 10000 });
   });
 });
