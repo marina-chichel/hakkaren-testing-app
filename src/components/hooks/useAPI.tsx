@@ -4,6 +4,7 @@ import {
   authToken,
   resetURL,
   executeURL,
+  generateWithAI,
 } from "../../../api-settings";
 
 type UserResp = {
@@ -101,7 +102,17 @@ const useAPI = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
         },
-        body: `{"configuration": [ {"users": { "rows": 5, "returned": true } } ], "generateWithAi": false }`,
+        body: `{
+          "configuration": [
+            {
+              "users": {
+                "rows": 5,
+                "returned": true
+              }
+            }
+          ],
+          "generateWithAi": ${generateWithAI}
+        }`,
       });
 
       const responseBody = await response.json();
