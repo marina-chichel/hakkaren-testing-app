@@ -43,7 +43,7 @@ function Users() {
         >
           {isResetting && (
             <CircularProgress
-              color="secondary"
+              color="primary"
               size={20}
               thickness={4}
               sx={{ marginRight: "10px" }}
