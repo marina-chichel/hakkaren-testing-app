@@ -101,6 +101,7 @@ const useAPI = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
         },
+        body: `{"configuration": [ {"users": { "rows": 5, "returned": true } } ], "generateWithAi": false }`,
       });
 
       const responseBody = await response.json();
