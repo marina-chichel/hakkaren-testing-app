@@ -5,6 +5,7 @@ import {
   resetURL,
   executeURL,
   generateWithAI,
+  host,
 } from "../../../api-settings";
 
 type UserResp = {
@@ -36,7 +37,7 @@ const useAPI = () => {
     setIsFetching(true);
     try {
       setError("");
-      const response = await fetch("http://localhost:3000/connect-to-mongodb", {
+      const response = await fetch(`${host}/connect-to-mongodb`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,33 +54,34 @@ const useAPI = () => {
     }
   };
 
+  const transformUsers = (users: UserResp) => {
+    return users.map((user) => ({
+      id: user._id,
+      name: user.email
+        .split("@")[0]
+        .replace(/\d/g, "")
+        .split(/[._]/)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" "),
+      email: user.email,
+      language: user.profile.language,
+      team: user.team,
+      date: user.disabled,
+    }));
+  };
+
   const getUsers = async () => {
     setError("");
     setIsFetching(true);
     try {
-      const response = await fetch("http://localhost:3000", {
+      const response = await fetch(`${host}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
       const data = await response.text();
-      console.log(data);
-      setUsers(
-        (JSON.parse(data) as UserResp).map((user) => ({
-          id: user._id,
-          name: user.email
-            .split("@")[0]
-            .replace(/\d/g, "")
-            .split(/[._]/)
-            .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-            .join(" "),
-          email: user.email,
-          language: user.profile.language,
-          team: user.team,
-          date: user.disabled,
-        }))
-      );
+      setUsers(transformUsers(JSON.parse(data)));
     } catch (error) {
       setError("Couldn't fetch users");
       setUsers([]);
@@ -96,31 +98,24 @@ const useAPI = () => {
     setError("");
     setIsGenerating(true);
     try {
-      const response = await fetch(executeURL, {
+      const response = await fetch(`${host}/execute`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
         },
-        body: `{
-          "configuration": [
-            {
-              "users": {
-                "rows": 5,
-                "returned": true
-              }
-            }
-          ],
-          "generateWithAi": ${generateWithAI}
-        }`,
+        body: JSON.stringify({
+          executeURL,
+          authToken,
+          generateWithAI,
+        }),
       });
 
       const responseBody = await response.json();
-      console.log("Response Body:", responseBody);
 
       if (responseBody?.success === true) {
         setError("");
-        getUsers();
+        const fetchedUsers = responseBody?.insertedData[0]?.data?.documents;
+        setUsers((curr) => [...curr, ...transformUsers(fetchedUsers)]);
       } else {
         setError(responseBody.message);
       }
@@ -136,22 +131,23 @@ const useAPI = () => {
     setError("");
     setIsResetting(true);
     try {
-      const response = await fetch(resetURL, {
+      const response = await fetch(`${host}/reset`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
         },
-
-        body: `{ "resetTo": "empty" }`,
+        body: JSON.stringify({
+          resetURL,
+          authToken,
+        }),
       });
 
       const responseBody = await response.json();
-      console.log("Response Body:", responseBody);
+      console.log("Reset Response Body:", responseBody);
 
       if (responseBody?.success === true) {
         setError("");
-        getUsers();
+        setUsers([]);
       } else {
         setError(responseBody.message);
       }

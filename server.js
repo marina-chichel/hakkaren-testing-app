@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import fetch from "node-fetch";
 
 const app = express();
 const PORT = 3000;
@@ -14,6 +15,7 @@ const User = mongoose.model("User", userSchema);
 app.use(cors());
 app.use(express.json());
 
+// Connect endpoint
 app.post("/connect-to-mongodb", async (req, res) => {
   const { connectionString } = req.body;
   try {
@@ -29,6 +31,7 @@ app.post("/connect-to-mongodb", async (req, res) => {
   }
 });
 
+// Get users endpoint
 app.get("/", async (req, res) => {
   try {
     const users = await User.find({});
@@ -38,6 +41,62 @@ app.get("/", async (req, res) => {
   }
 });
 
+// Execute endpoint
+app.post("/execute", async (req, res) => {
+  const { executeURL, authToken, generateWithAI } = req.body;
+
+  try {
+    const response = await fetch(executeURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({
+        configuration: [
+          {
+            users: {
+              rows: 5,
+              returned: true,
+            },
+          },
+        ],
+        generateWithAi: generateWithAI,
+      }),
+    });
+
+    const responseBody = await response.json();
+    console.log("Execute Response Body:", responseBody);
+    res.json(responseBody);
+  } catch (error) {
+    console.error("Execute error:", error);
+    res.status(500).send("Execute error");
+  }
+});
+
+// Execute endpoint
+app.put("/reset", async (req, res) => {
+  try {
+    const { resetURL, authToken } = req.body;
+    const response = await fetch(resetURL, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({ resetTo: "empty" }),
+    });
+
+    const responseBody = await response.json();
+    console.log("Reset Response Body:", responseBody);
+    res.json(responseBody);
+  } catch (error) {
+    console.error("Error executing reset:", error);
+    res.status(500).send("Error executing reset");
+  }
+});
+
+// Start server
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
