@@ -31,6 +31,29 @@ app.post("/connect-to-mongodb", async (req, res) => {
   }
 });
 
+// LOGIN endpoint
+app.post("/login", async (req, res) => {
+  console.log("BODY", req.body);
+  try {
+    const response = await fetch(
+      "https://api.dev.hakkaren.lastingdynamics.net/v1/auth/login/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(req.body),
+      }
+    );
+    const responseBody = await response.json();
+    console.log("Login Response Body:", responseBody);
+    res.json(responseBody);
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).send("Login error");
+  }
+});
+
 // Get users endpoint
 app.get("/", async (req, res) => {
   try {

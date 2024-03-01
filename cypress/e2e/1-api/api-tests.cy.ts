@@ -6,6 +6,7 @@ describe("Test Hakkaren API", () => {
     cy.intercept("http://localhost:3000/reset").as("reset");
 
     cy.visit("/");
+    cy.contains("Login").click();
     cy.pause();
   });
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   connectionString,
-  authToken,
   resetURL,
   executeURL,
   generateWithAI,
@@ -97,6 +96,7 @@ const useAPI = () => {
   const handleGenerate = async () => {
     setError("");
     setIsGenerating(true);
+    const authToken = localStorage.getItem("token");
     try {
       const response = await fetch(`${host}/execute`, {
         method: "POST",
@@ -130,6 +130,7 @@ const useAPI = () => {
   const handleReset = async () => {
     setError("");
     setIsResetting(true);
+    const authToken = localStorage.getItem("token");
     try {
       const response = await fetch(`${host}/reset`, {
         method: "PUT",
