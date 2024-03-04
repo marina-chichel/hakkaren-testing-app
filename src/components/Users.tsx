@@ -5,12 +5,28 @@ import {
   Snackbar,
   TextField,
   IconButton,
+  Typography,
+  styled,
+  InputAdornment,
 } from "@mui/material";
-import { Search, Sort, DeleteOutline, PersonAdd } from "@mui/icons-material"; // Import icons for search, filter, and sort
+import {
+  Search,
+  Sort,
+  DeleteOutline,
+  PersonAdd,
+  Logout,
+  ArrowDropDown,
+  NotificationImportant,
+  QuestionMark,
+  Send,
+  ClearSharp,
+} from "@mui/icons-material"; // Import icons for search, filter, and sort
 import UserTable from "./UserTable";
 import useAPI from "./hooks/useAPI";
+import UK from "../assets/UK.png";
+import Tools from "./Tools";
 
-function Users() {
+function Users({ logOut }: { logOut: () => void }) {
   const {
     handleGenerate,
     handleReset,
@@ -26,96 +42,112 @@ function Users() {
     handleSearchChange,
   } = useAPI();
 
+  const IconBtn = styled(IconButton)`
+    color: #21642b;
+  `;
+
   return (
-    <Box display="flex">
-      {/* Left panel with search and sort */}
+    <>
       <Box
-        // width="300px"
-        p="20px"
-        borderRight="1px solid #e0e0e0"
         display="flex"
-        flexDirection="column"
-        gap={2}
+        sx={{ py: 2, px: 8 }}
+        alignItems="center"
+        flex={1}
+        justifyContent="space-between"
       >
-        {/* Search input */}
-        <Box display="flex" alignItems="center">
+        <Box
+          display="flex"
+          alignItems="center"
+          gap={8}
+          // border="1px solid red"
+        >
+          <Typography variant="h5" component="h5" color="#1fdf1f">
+            WorkWave
+          </Typography>
+
           <TextField
             variant="outlined"
             size="small"
             placeholder="Search..."
             value={searchQuery}
             onChange={handleSearchChange}
+            sx={{
+              width: "500px",
+              borderRadius: 2,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  {searchQuery && (
+                    <IconButton onClick={() => {}}>
+                      <ClearSharp />
+                    </IconButton>
+                  )}
+                </InputAdornment>
+              ),
+            }}
           />
-          <IconButton>
-            <Search />
-          </IconButton>
         </Box>
 
-        {/* Sort options */}
-        <Box>
-          {/* Add your sort options here */}
-          <Button variant="outlined" startIcon={<Sort />}>
-            Sort
-          </Button>
+        <Box display="flex" alignItems="center">
+          <IconBtn>
+            <Send />
+          </IconBtn>
+          <IconBtn>
+            <QuestionMark />
+          </IconBtn>
+          <IconBtn>
+            <NotificationImportant />
+          </IconBtn>
+          <IconBtn onClick={logOut}>
+            <Logout />
+          </IconBtn>
+          <Box display="flex" alignItems="center" gap={1} ml={2}>
+            <img src={UK} width={16} alt="UK flag" />
+            <Typography color="primary.900">English</Typography>
+            <ArrowDropDown />
+          </Box>
         </Box>
-
-        {/* Buttons for generating and resetting users */}
-
-        {/* <Box display="flex" gap={2}> */}
-        <Box>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleGenerate}
-            disabled={!!error || isResetting}
-            startIcon={
-              isGenerating ? <CircularProgress size={16} /> : <PersonAdd />
-            }
-          >
-            Fetch users
-          </Button>
-        </Box>
-        <Box>
-          <Button
-            variant="outlined"
-            onClick={handleReset}
-            color="error"
-            disabled={!!error || isGenerating || users.length === 0}
-            startIcon={
-              isResetting ? (
-                <CircularProgress size={16} color="error" />
-              ) : (
-                <DeleteOutline />
-              )
-            }
-          >
-            Delete All
-          </Button>
-        </Box>
-        {/* </Box> */}
       </Box>
 
-      {/* Right panel with user table */}
-      <Box flex="1" p="20px">
-        {/* User table */}
-        <UserTable
-          users={users}
-          deleteUser={deleteUser}
-          isFetching={isFetching}
+      <Box display="flex" px={6} gap={4}>
+        <Tools
+          handleGenerate={handleGenerate}
+          handleReset={handleReset}
+          error={error}
+          isResetting={isResetting}
+          isGenerating={isGenerating}
+          isEmpty={users.length === 0}
         />
+        {/* Right panel with user table */}
+        <Box flex="1" p={2}>
+          <UserTable
+            users={users}
+            deleteUser={deleteUser}
+            isFetching={isFetching}
+          />
 
-        {/* Snackbar for displaying errors */}
-        <Snackbar
-          open={!!error}
-          message={error}
-          action={
-            <Button color="inherit" size="small" onClick={connectDB}>
-              Retry
-            </Button>
-          }
-        />
+          {/* Snackbar for displaying errors */}
+          <Snackbar
+            open={!!error}
+            message={error}
+            action={
+              <Button color="inherit" size="small" onClick={connectDB}>
+                Retry
+              </Button>
+            }
+          />
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 }
 

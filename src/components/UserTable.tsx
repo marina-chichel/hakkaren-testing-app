@@ -12,6 +12,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EmptyTable from "./EmptyTable";
 import { User } from "./hooks/useAPI";
 
+const StyledCard = styled(Card)(({ theme }) => ({
+  transition: "background-color 0.3s ease",
+  "&:hover": {
+    backgroundColor: theme.palette.grey[200],
+  },
+}));
+
 const NameContainer = styled(Box)(() => ({
   display: "flex",
   alignItems: "center",
@@ -79,7 +86,7 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
     <Grid container spacing={2}>
       {users.map((row, index) => (
         <Grid item xs={12} sm={12} md={12} lg={12} key={`${row.name}-${index}`}>
-          <Card>
+          <StyledCard>
             <CardContent>
               <NameContainer>
                 <NameInitialsContainer bgColor={row.color}>
@@ -101,7 +108,7 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
                 }}
               />
             </CardContent>
-          </Card>
+          </StyledCard>
         </Grid>
       ))}
     </Grid>
