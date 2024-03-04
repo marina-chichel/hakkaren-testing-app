@@ -24,6 +24,8 @@ export type User = {
   date: string;
 
   company: string;
+
+  rate: number;
 };
 
 const useAPI = () => {
@@ -56,6 +58,21 @@ const useAPI = () => {
     }
   };
 
+  function biasedRandom() {
+    const mean = 5; // Mean of the distribution
+    const stdDev = 2; // Standard deviation
+
+    let num;
+    do {
+      const u1 = Math.random();
+      const u2 = Math.random();
+      const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2); // Box-Muller transform
+      num = Math.round(mean + stdDev * z); // Adjust mean and standard deviation
+    } while (num < 1 || num > 20); // Ensure the number is within the range 1-10
+
+    return num;
+  }
+
   const transformUsers = (users: UserResp) => {
     console.log(users);
 
@@ -75,6 +92,8 @@ const useAPI = () => {
       date: !isNaN(Date.parse(user.disabled))
         ? new Date(user.disabled).toLocaleString("en-US")
         : user.disabled,
+
+      rate: biasedRandom(),
     }));
   };
 

@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  CircularProgress,
   Snackbar,
   TextField,
   IconButton,
@@ -11,16 +10,15 @@ import {
 } from "@mui/material";
 import {
   Search,
-  Sort,
-  DeleteOutline,
-  PersonAdd,
   Logout,
   ArrowDropDown,
   NotificationImportant,
   QuestionMark,
   Send,
   ClearSharp,
-} from "@mui/icons-material"; // Import icons for search, filter, and sort
+  PersonAdd,
+  DeleteOutline,
+} from "@mui/icons-material";
 import UserTable from "./UserTable";
 import useAPI from "./hooks/useAPI";
 import UK from "../assets/UK.png";
@@ -35,9 +33,6 @@ function Users({ logOut }: { logOut: () => void }) {
     error,
     connectDB,
     isFetching,
-    isGenerating,
-    isResetting,
-
     searchQuery,
     handleSearchChange,
   } = useAPI();
@@ -55,12 +50,7 @@ function Users({ logOut }: { logOut: () => void }) {
         flex={1}
         justifyContent="space-between"
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          gap={8}
-          // border="1px solid red"
-        >
+        <Box display="flex" alignItems="center" gap={8}>
           <Typography variant="h5" component="h5" color="#1fdf1f">
             WorkWave
           </Typography>
@@ -98,6 +88,12 @@ function Users({ logOut }: { logOut: () => void }) {
         </Box>
 
         <Box display="flex" alignItems="center">
+          <IconBtn onClick={handleGenerate}>
+            <PersonAdd />
+          </IconBtn>
+          <IconBtn onClick={handleReset}>
+            <DeleteOutline />
+          </IconBtn>
           <IconBtn>
             <Send />
           </IconBtn>
@@ -119,15 +115,8 @@ function Users({ logOut }: { logOut: () => void }) {
       </Box>
 
       <Box display="flex" px={6} gap={4}>
-        <Tools
-          handleGenerate={handleGenerate}
-          handleReset={handleReset}
-          error={error}
-          isResetting={isResetting}
-          isGenerating={isGenerating}
-          isEmpty={users.length === 0}
-        />
-        {/* Right panel with user table */}
+        <Tools isEmpty={users.length === 0} users={users} />
+
         <Box flex="1" p={2}>
           <UserTable
             users={users}

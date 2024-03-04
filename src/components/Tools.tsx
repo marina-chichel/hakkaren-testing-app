@@ -1,32 +1,21 @@
-import { Box, Button, CircularProgress } from "@mui/material";
-import { Sort, DeleteOutline, PersonAdd } from "@mui/icons-material"; // Import icons for search, filter, and sort
+import { Box, Button, Typography } from "@mui/material";
+import { Sort } from "@mui/icons-material"; // Import icons for search, filter, and sort
+import { User } from "./hooks/useAPI";
+import UserGraph from "./UserGraph";
 
 interface P {
-  handleGenerate: () => void;
-  handleReset: () => void;
-  error: string;
-
-  isResetting: boolean;
-  isGenerating: boolean;
   isEmpty: boolean;
+  users: User[];
 }
-function Tools({
-  handleGenerate,
-  handleReset,
-  error,
-  isEmpty,
-  isGenerating,
-  isResetting,
-}: P) {
+function Tools({ isEmpty, users }: P) {
   return (
     <Box
-      pr={4}
       py={4}
       borderRight="1px solid #e0e0e0"
       display="flex"
       flexDirection="column"
       gap={2}
-      //   border="1px solid yellow"
+      width="18%"
     >
       <Box>
         <Button
@@ -38,38 +27,33 @@ function Tools({
         </Button>
       </Box>
 
-      <Box>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={handleGenerate}
-          disabled={!!error || isResetting}
-          startIcon={
-            isGenerating ? <CircularProgress size={16} /> : <PersonAdd />
-          }
-          sx={{ borderRadius: 2 }}
+      <Typography variant="body1" fontWeight={600}>
+        Category
+      </Typography>
+      <Typography variant="body2">All categories</Typography>
+      <Typography variant="body2">Accounting & Consulting</Typography>
+      <Typography variant="body2">Admin Support</Typography>
+      <Typography variant="body2">Customer Service</Typography>
+      <Typography variant="body2">Data Science & Analytics</Typography>
+      <Typography variant="body2">Design & Creative</Typography>
+      <Typography variant="body2">Engineering & Architecture</Typography>
+      <Typography variant="body2">IT & Networking</Typography>
+      <Typography variant="body2">Legal</Typography>
+      <Typography variant="body2">Sales & Marketing</Typography>
+      <Typography variant="body2">Web, Mobile & Software Dev</Typography>
+      <Typography variant="body2">Writing</Typography>
+      {!isEmpty && (
+        <Box
+          mt={4}
+          pr={4}
+          display="flex"
+          flexDirection={"column"}
+          alignItems="center"
+          justifyContent={"center"}
         >
-          Fetch users
-        </Button>
-      </Box>
-      <Box>
-        <Button
-          variant="outlined"
-          onClick={handleReset}
-          color="error"
-          disabled={!!error || isGenerating || isEmpty}
-          sx={{ borderRadius: 2 }}
-          startIcon={
-            isResetting ? (
-              <CircularProgress size={16} color="error" />
-            ) : (
-              <DeleteOutline />
-            )
-          }
-        >
-          Delete All
-        </Button>
-      </Box>
+          <UserGraph users={users} />
+        </Box>
+      )}
     </Box>
   );
 }
