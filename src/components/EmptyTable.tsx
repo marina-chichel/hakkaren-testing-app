@@ -4,9 +4,9 @@ const EmptyTable = () => {
   return (
     <Box
       width="100%"
-      height={507}
+      height={500}
       borderRadius="8px"
-      border="1px solid #E4E4EF"
+      // border="1px solid #E4E4EF"
       display="flex"
       alignItems="center"
       justifyContent="center"

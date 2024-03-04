@@ -1,27 +1,16 @@
+import React from "react";
 import {
   Box,
   CircularProgress,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
+  Card,
+  CardContent,
+  Grid,
   styled,
+  Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EmptyTable from "./EmptyTable";
 import { User } from "./hooks/useAPI";
-
-const TABLE_HEADERS = [
-  "User",
-  "Email address",
-  "Language",
-  "Team",
-  "Created on",
-  "",
-];
 
 const NameContainer = styled(Box)(() => ({
   display: "flex",
@@ -29,25 +18,24 @@ const NameContainer = styled(Box)(() => ({
   gap: 12,
 }));
 
-const NameInitialsContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  minWidth: 40,
-  height: 40,
-  padding: 4,
-  backgroundColor: "#605DEC",
-  color: theme.palette.common.white,
-  borderRadius: "50%",
-  justifyContent: "center",
-  alignItems: "center",
-}));
+const NameInitialsContainer = styled(Box)<{ bgColor: string }>(
+  ({ theme, bgColor }) => ({
+    display: "flex",
+    minWidth: 40,
+    height: 40,
+    padding: 4,
+    backgroundColor: bgColor || "#605DEC",
+    opacity: 0.6,
+    color: theme.palette.common.white,
+    borderRadius: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+  })
+);
 
 const DeleteRowIcon = styled(DeleteIcon)(() => ({
   fill: "#BDBCDB",
   cursor: "pointer",
-}));
-
-const TablePaper = styled(Paper)(() => ({
-  border: "1px solid #E4E4EF",
 }));
 
 const getInitials = (name: string) => {
@@ -60,6 +48,14 @@ type UserTableParams = {
   deleteUser: (serId: string) => void;
   isFetching: boolean;
 };
+
+const Email = styled(Typography)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  fontWeight: "bold",
+  overflow: "hidden",
+  textOverflow: "ellipsis", // Cut off overflowed text with an ellipsis
+  whiteSpace: "nowrap",
+}));
 
 const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
   if (isFetching)
@@ -75,49 +71,40 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
       </Box>
     );
 
+  if (users.length === 0) {
+    return <EmptyTable />;
+  }
+
   return (
-    <>
-      <TableContainer component={TablePaper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {TABLE_HEADERS.map((value, key) => (
-                <TableCell key={key}>{value}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users.map((row, index) => (
-              <TableRow
-                key={`${row.name}-${index}`}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  <NameContainer>
-                    <NameInitialsContainer>
-                      {getInitials(row.name)}
-                    </NameInitialsContainer>
-                    {row.name}
-                  </NameContainer>
-                </TableCell>
-                <TableCell align="left">{row.email}</TableCell>
-                <TableCell align="left">{row.language}</TableCell>
-                <TableCell align="left">{row.team}</TableCell>
-                <TableCell align="left">{row.date}</TableCell>
-                <TableCell align="left">
-                  <DeleteRowIcon
-                    onClick={() => {
-                      deleteUser(row.id);
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {users.length === 0 && <EmptyTable />}
-    </>
+    <Grid container spacing={2}>
+      {users.map((row, index) => (
+        <Grid item xs={12} sm={12} md={12} lg={12} key={`${row.name}-${index}`}>
+          <Card>
+            <CardContent>
+              <NameContainer>
+                <NameInitialsContainer bgColor={row.color}>
+                  {getInitials(row.name)}
+                </NameInitialsContainer>
+
+                <Typography variant="h6">{row.name}</Typography>
+              </NameContainer>
+
+              <Email>{row.email}</Email>
+
+              <Typography variant="body1"> {row.date}</Typography>
+              <Typography>{row.position}</Typography>
+
+              <Typography> {row.company}</Typography>
+              <DeleteRowIcon
+                onClick={() => {
+                  deleteUser(row.id);
+                }}
+              />
+            </CardContent>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 

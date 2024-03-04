@@ -11,7 +11,7 @@ type UserResp = {
   _id: string;
   email: string;
   disabled: string;
-  profile: { language: string };
+  profile: { language: string; timezone: string };
   team: string;
 }[];
 
@@ -19,15 +19,18 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  language: string;
-  team: string;
+  position: string;
+  color: string;
   date: string;
+
+  company: string;
 };
 
 const useAPI = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const [error, setError] = useState("");
   const [users, setUsers] = useState<User[]>([]);
@@ -54,6 +57,8 @@ const useAPI = () => {
   };
 
   const transformUsers = (users: UserResp) => {
+    console.log(users);
+
     return users.map((user) => ({
       id: user._id,
       name: user.email
@@ -63,9 +68,13 @@ const useAPI = () => {
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
         .join(" "),
       email: user.email,
-      language: user.profile.language,
-      team: user.team,
-      date: user.disabled,
+      position: user.profile.language,
+      color: user.team,
+
+      company: user.profile.timezone,
+      date: !isNaN(Date.parse(user.disabled))
+        ? new Date(user.disabled).toLocaleString("en-US")
+        : user.disabled,
     }));
   };
 
@@ -164,16 +173,31 @@ const useAPI = () => {
     setUsers((curr) => curr.filter((user) => user.id !== userId));
   };
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+  const filteredUsers = users.filter((user) =>
+    Object.values(user).some(
+      (field) =>
+        typeof field === "string" &&
+        field.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
+
   return {
     handleGenerate,
     handleReset,
-    users,
+    // users,
     deleteUser,
     error,
     connectDB,
     isFetching,
     isGenerating,
     isResetting,
+
+    users: filteredUsers,
+    searchQuery,
+    handleSearchChange,
   };
 };
 
