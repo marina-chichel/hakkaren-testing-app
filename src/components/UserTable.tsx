@@ -11,7 +11,6 @@ import {
   Link,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EmptyTable from "./EmptyTable";
 import { User } from "./hooks/useAPI";
 import {
   Star,
@@ -176,10 +175,6 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
         <CircularProgress size={48} />
       </Box>
     );
-
-  if (users.length === 0) {
-    return <EmptyTable />;
-  }
 
   return (
     <Grid container spacing={2}>

@@ -23,6 +23,11 @@ import UserTable from "./UserTable";
 import useAPI from "./hooks/useAPI";
 import UK from "../assets/UK.png";
 import Tools from "./Tools";
+import Pagination from "@mui/material/Pagination";
+import EmptyTable from "./EmptyTable";
+import { useEffect, useMemo, useState } from "react";
+
+const CARDS_ON_PAGE = 8;
 
 function Users({ logOut }: { logOut: () => void }) {
   const {
@@ -40,6 +45,26 @@ function Users({ logOut }: { logOut: () => void }) {
   const IconBtn = styled(IconButton)`
     color: #21642b;
   `;
+  const noUsers = users.length === 0;
+
+  const [currPage, setCurrentPage] = useState(1);
+
+  const numberOfPages = users.length
+    ? Math.ceil(users.length / CARDS_ON_PAGE)
+    : 1;
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedUsers = useMemo(
+    () => users.slice((currPage - 1) * CARDS_ON_PAGE, currPage * CARDS_ON_PAGE),
+    [users.length, currPage]
+  );
+
+  useEffect(() => {
+    !!users.length && setCurrentPage(1);
+  }, [users.length]);
 
   return (
     <>
@@ -115,15 +140,30 @@ function Users({ logOut }: { logOut: () => void }) {
       </Box>
 
       <Box display="flex" px={6} gap={4}>
-        <Tools isEmpty={users.length === 0} users={users} />
+        <Tools isEmpty={noUsers} users={users} />
 
         <Box flex="1" p={2}>
-          <UserTable
-            users={users}
-            deleteUser={deleteUser}
-            isFetching={isFetching}
-          />
-
+          {noUsers ? (
+            <EmptyTable />
+          ) : (
+            <>
+              <UserTable
+                users={paginatedUsers}
+                deleteUser={deleteUser}
+                isFetching={isFetching}
+              />
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Pagination
+                  sx={{ p: 3 }}
+                  count={numberOfPages}
+                  page={currPage}
+                  variant="outlined"
+                  color="primary"
+                  onChange={handlePageChange}
+                />
+              </Box>
+            </>
+          )}
           {/* Snackbar for displaying errors */}
           <Snackbar
             open={!!error}

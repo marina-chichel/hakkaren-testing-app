@@ -39,9 +39,8 @@ function Tools({ isEmpty, users }: P) {
       <Typography variant="body2">Engineering & Architecture</Typography>
       <Typography variant="body2">IT & Networking</Typography>
       <Typography variant="body2">Legal</Typography>
-      <Typography variant="body2">Sales & Marketing</Typography>
       <Typography variant="body2">Web, Mobile & Software Dev</Typography>
-      <Typography variant="body2">Writing</Typography>
+      <Typography variant="body2">Sales & Marketing</Typography>
       {!isEmpty && (
         <Box
           mt={4}
