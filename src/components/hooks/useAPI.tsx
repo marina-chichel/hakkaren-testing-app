@@ -12,6 +12,8 @@ type UserResp = {
   email: string;
   disabled: string;
   profile: { language: string; timezone: string };
+  notification: { disabled: boolean };
+
   team: string;
 }[];
 
@@ -22,10 +24,12 @@ export type User = {
   position: string;
   color: string;
   date: string;
-
+  time: string;
   company: string;
 
   rate: number;
+
+  success: boolean;
 };
 
 const useAPI = () => {
@@ -90,10 +94,13 @@ const useAPI = () => {
 
       company: user.profile.timezone,
       date: !isNaN(Date.parse(user.disabled))
-        ? new Date(user.disabled).toLocaleString("en-US")
+        ? new Date(user.disabled).toLocaleDateString("en-US")
         : user.disabled,
-
+      time: !isNaN(Date.parse(user.disabled))
+        ? new Date(user.disabled).toLocaleTimeString("en-US")
+        : user.disabled,
       rate: biasedRandom(),
+      success: user?.notification?.disabled,
     }));
   };
 
