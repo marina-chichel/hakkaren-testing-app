@@ -63,7 +63,6 @@ const Info = styled(Box)(() => ({
   display: "flex",
   alignItems: "flex-end",
   gap: 16,
-  marginBottom: 12,
   width: "100%",
   justifyContent: "space-between",
 }));
