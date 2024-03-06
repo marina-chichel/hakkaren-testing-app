@@ -9,6 +9,8 @@ import {
   Badge,
   Button,
   Link,
+  Modal,
+  Avatar,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { User } from "./hooks/useAPI";
@@ -18,11 +20,8 @@ import {
   StarOutline,
   WorkspacePremium,
 } from "@mui/icons-material";
-
-const getInitials = (name: string) => {
-  const nameArr = name.split(" ");
-  return `${nameArr[0].charAt(0)}${nameArr[1]?.charAt(0) || ""}`;
-};
+import { useState } from "react";
+import UserInfo from "./UserInfo";
 
 type UserTableParams = {
   users: User[];
@@ -67,19 +66,6 @@ const Info = styled(Box)(() => ({
   marginBottom: 12,
   width: "100%",
   justifyContent: "space-between",
-}));
-
-const Avatar = styled(Box)<{ bgColor: string }>(({ theme, bgColor }) => ({
-  display: "flex",
-  minWidth: 40,
-  height: 40,
-  padding: 4,
-  backgroundColor: bgColor || "#605DEC",
-  opacity: 0.6,
-  color: theme.palette.common.white,
-  borderRadius: "50%",
-  justifyContent: "center",
-  alignItems: "center",
 }));
 
 const Name = styled(Typography)(({ theme }) => ({
@@ -151,10 +137,6 @@ const getStars = (rate: number) => {
   return stars;
 };
 
-const handleUserClick = (user: User) => {
-  console.log(user);
-};
-
 const NamePosition = styled(Box)({
   display: "flex",
   flexDirection: "column",
@@ -163,6 +145,18 @@ const NamePosition = styled(Box)({
 });
 
 const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleUserClick = (user: User) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   if (isFetching)
     return (
       <Box
@@ -178,8 +172,13 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
 
   return (
     <Grid container spacing={2}>
+      {/* Render the modal */}
+      <Modal open={isModalOpen} onClose={handleCloseModal}>
+        <> {!!selectedUser && <UserInfo user={selectedUser} />}</>
+      </Modal>
+
       {users.map((row, index) => (
-        <Grid item xs={12} sm={12} md={12} lg={6} key={`${row.name}-${index}`}>
+        <Grid item xs={12} sm={12} md={12} lg={12} key={`${row.name}-${index}`}>
           <StyledCard onClick={() => handleUserClick(row)}>
             <StyledCardContent>
               <Header>
@@ -187,7 +186,15 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
                   <StyledBadge
                     badgeContent={row.success && <WorkspacePremium />}
                   >
-                    <Avatar bgColor={row.color}>{getInitials(row.name)}</Avatar>
+                    <Avatar
+                      alt="Avatar"
+                      src={row.avatar}
+                      sx={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: "50%",
+                      }}
+                    />
                   </StyledBadge>
 
                   <NamePosition>
@@ -217,7 +224,7 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
                     {row.company}
                   </Button>
                 </HStack>
-                <Email>{row.email}</Email>
+                <Email>{row.email.toLowerCase()}</Email>
               </Info>
             </StyledCardContent>
           </StyledCard>

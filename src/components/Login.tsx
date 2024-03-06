@@ -42,7 +42,7 @@ function Login({ setIsLoggedIn }: P) {
 
   return (
     <>
-      <Box display="flex" justifyContent="space-between" sx={{ py: 2, px: 8 }}>
+      <Box display="flex" justifyContent="space-between" sx={{ py: 2, mx: 28 }}>
         <Typography variant="h5" component="h5" color="#1fdf1f">
           WorkWave
         </Typography>

@@ -11,8 +11,8 @@ type UserResp = {
   _id: string;
   email: string;
   disabled: string;
-  profile: { language: string; timezone: string };
-  notification: { disabled: boolean };
+  profile: { language: string; timezone: string; contacts: string[] };
+  notification: { disabled: boolean; frequency: string };
 
   team: string;
 }[];
@@ -30,6 +30,9 @@ export type User = {
   rate: number;
 
   success: boolean;
+
+  avatar: string;
+  contacts: string[];
 };
 
 const useAPI = () => {
@@ -88,7 +91,7 @@ const useAPI = () => {
         .split(/[._]/)
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
         .join(" "),
-      email: user.email,
+      email: user.email.toLowerCase(),
       position: user.profile.language,
       color: user.team,
 
@@ -101,6 +104,8 @@ const useAPI = () => {
         : user.disabled,
       rate: biasedRandom(),
       success: user?.notification?.disabled,
+      avatar: user?.notification?.frequency,
+      contacts: user?.profile?.contacts,
     }));
   };
 

@@ -70,7 +70,7 @@ function Users({ logOut }: { logOut: () => void }) {
     <>
       <Box
         display="flex"
-        sx={{ py: 2, px: 8 }}
+        sx={{ py: 2, mx: 28 }}
         alignItems="center"
         flex={1}
         justifyContent="space-between"
@@ -139,7 +139,7 @@ function Users({ logOut }: { logOut: () => void }) {
         </Box>
       </Box>
 
-      <Box display="flex" px={6} gap={4}>
+      <Box display="flex" mx={28} gap={4}>
         <Tools isEmpty={noUsers} users={users} />
 
         <Box flex="1" p={2}>

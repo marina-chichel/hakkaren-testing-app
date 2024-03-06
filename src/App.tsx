@@ -28,7 +28,7 @@ function App() {
           bgcolor: "primary.900",
           color: "white",
           textAlign: "center",
-          mx: 8,
+          mx: 28,
           mb: 2,
           borderRadius: 2,
           fontSize: 12,
