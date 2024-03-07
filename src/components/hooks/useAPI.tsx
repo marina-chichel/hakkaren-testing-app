@@ -81,7 +81,7 @@ const useAPI = () => {
   }
 
   const transformUsers = (users: UserResp) => {
-    console.log(users);
+    console.log({ users });
 
     return users.map((user) => ({
       id: user._id,
@@ -154,7 +154,12 @@ const useAPI = () => {
 
       if (responseBody?.success === true) {
         setError("");
-        const fetchedUsers = responseBody?.insertedData[0]?.data?.documents;
+
+        const userData = responseBody?.insertedData.find(
+          (item: any) => item.collection === "users"
+        );
+        const fetchedUsers = userData ? userData.data?.documents : [];
+
         setUsers((curr) => [...curr, ...transformUsers(fetchedUsers)]);
       } else {
         setError(responseBody.message);

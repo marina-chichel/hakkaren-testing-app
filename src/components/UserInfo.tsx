@@ -13,6 +13,7 @@ import {
 import { User } from "./hooks/useAPI";
 import { ArrowRight, FlashOn, Stars } from "@mui/icons-material";
 import useContacts from "./hooks/useContacts";
+import { CutText } from "./base/Basic";
 
 const Content = styled(Paper)(() => ({
   display: "flex",
@@ -67,18 +68,10 @@ const Info = styled(Box)(() => ({
   justifyContent: "space-between",
 }));
 
-const CutText = styled(Typography)(() => ({
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  whiteSpace: "normal",
-}));
-
 function UserInfo({ user }: { user: User }) {
   const { contacts, error, isFetchingContacts } = useContacts(
     user?.contactsId || ""
   );
-
-  console.log(contacts);
 
   return (
     <>

@@ -1,7 +1,8 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { Sort } from "@mui/icons-material"; // Import icons for search, filter, and sort
 import { User } from "./hooks/useAPI";
 import UserGraph from "./UserGraph";
+import { CutText } from "./base/Basic";
 
 interface P {
   isEmpty: boolean;
@@ -16,6 +17,7 @@ function Tools({ isEmpty, users }: P) {
       flexDirection="column"
       gap={2}
       width="18%"
+      minWidth={200}
     >
       <Box>
         <Button
@@ -27,20 +29,20 @@ function Tools({ isEmpty, users }: P) {
         </Button>
       </Box>
 
-      <Typography variant="body1" fontWeight={600}>
+      <CutText variant="body1" fontWeight={600}>
         Category
-      </Typography>
-      <Typography variant="body2">All categories</Typography>
-      <Typography variant="body2">Accounting & Consulting</Typography>
-      <Typography variant="body2">Admin Support</Typography>
-      <Typography variant="body2">Customer Service</Typography>
-      <Typography variant="body2">Data Science & Analytics</Typography>
-      <Typography variant="body2">Design & Creative</Typography>
-      <Typography variant="body2">Engineering & Architecture</Typography>
-      <Typography variant="body2">IT & Networking</Typography>
-      <Typography variant="body2">Legal</Typography>
-      <Typography variant="body2">Web, Mobile & Software Dev</Typography>
-      <Typography variant="body2">Sales & Marketing</Typography>
+      </CutText>
+      <CutText variant="body2">All categories</CutText>
+      <CutText variant="body2">Accounting & Consulting</CutText>
+      <CutText variant="body2">Admin Support</CutText>
+      <CutText variant="body2">Customer Service</CutText>
+      <CutText variant="body2">Data Science & Analytics</CutText>
+      <CutText variant="body2">Design & Creative</CutText>
+      <CutText variant="body2">Engineering & Architecture</CutText>
+      <CutText variant="body2">IT & Networking</CutText>
+      <CutText variant="body2">Legal</CutText>
+      <CutText variant="body2">Web, Mobile & Software Dev</CutText>
+      <CutText variant="body2">Sales & Marketing</CutText>
       {!isEmpty && (
         <Box
           mt={4}

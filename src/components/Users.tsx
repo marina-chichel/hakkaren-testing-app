@@ -72,10 +72,16 @@ function Users({ logOut }: { logOut: () => void }) {
         display="flex"
         sx={{ py: 2, mx: 28 }}
         alignItems="center"
-        flex={1}
         justifyContent="space-between"
+        gap={3}
       >
-        <Box display="flex" alignItems="center" gap={8}>
+        <Box
+          display="flex"
+          alignItems="center"
+          gap={8}
+          width={"50%"}
+          minWidth={"300px"}
+        >
           <Typography variant="h5" component="h5" color="#1fdf1f">
             WorkWave
           </Typography>
@@ -87,7 +93,7 @@ function Users({ logOut }: { logOut: () => void }) {
             value={searchQuery}
             onChange={handleSearchChange}
             sx={{
-              width: "500px",
+              width: "100%",
               borderRadius: 2,
               "& .MuiOutlinedInput-root": {
                 borderRadius: 2,
