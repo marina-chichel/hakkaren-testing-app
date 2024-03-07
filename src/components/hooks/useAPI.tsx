@@ -11,9 +11,9 @@ type UserResp = {
   _id: string;
   email: string;
   disabled: string;
-  profile: { language: string; timezone: string; contacts: string[] };
+  profile: { language: string; timezone: string };
   notification: { disabled: boolean; frequency: string };
-
+  secure: { _id: string };
   team: string;
 }[];
 
@@ -32,7 +32,7 @@ export type User = {
   success: boolean;
 
   avatar: string;
-  contacts: string[];
+  contactsId: string;
 };
 
 const useAPI = () => {
@@ -105,7 +105,7 @@ const useAPI = () => {
       rate: biasedRandom(),
       success: user?.notification?.disabled,
       avatar: user?.notification?.frequency,
-      contacts: user?.profile?.contacts,
+      contactsId: user?.secure?._id,
     }));
   };
 

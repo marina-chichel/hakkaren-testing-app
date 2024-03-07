@@ -11,7 +11,13 @@ const userSchema = new mongoose.Schema({
   email: String,
 });
 
+const DatabasesSchema = new mongoose.Schema({
+  email: String,
+});
+
 const User = mongoose.model("User", userSchema);
+const Databases = mongoose.model("Databases", DatabasesSchema);
+
 app.use(cors());
 app.use(express.json());
 
@@ -61,6 +67,20 @@ app.get("/", async (req, res) => {
     res.json(users);
   } catch (err) {
     res.status(500).send("Error fetching users");
+  }
+});
+
+// Get contacts
+app.get(`/contacts/:id`, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const databases = await Databases.findOne({ _id: id });
+    if (!databases) {
+      return res.status(404).json({ error: "Contacts not found" });
+    }
+    res.json(databases);
+  } catch (err) {
+    res.status(500).send("Error fetching contacts");
   }
 });
 

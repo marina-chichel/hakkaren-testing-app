@@ -2,14 +2,17 @@ import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
   Grid,
   IconButton,
   Paper,
+  Snackbar,
   Typography,
   styled,
 } from "@mui/material";
 import { User } from "./hooks/useAPI";
 import { ArrowRight, FlashOn, Stars } from "@mui/icons-material";
+import useContacts from "./hooks/useContacts";
 
 const Content = styled(Paper)(() => ({
   display: "flex",
@@ -64,90 +67,123 @@ const Info = styled(Box)(() => ({
   justifyContent: "space-between",
 }));
 
+const CutText = styled(Typography)(() => ({
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "normal",
+}));
+
 function UserInfo({ user }: { user: User }) {
+  const { contacts, error, isFetchingContacts } = useContacts(
+    user?.contactsId || ""
+  );
+
+  console.log(contacts);
+
   return (
-    <Content>
-      <Border>
-        <Header>
-          <Avatar
-            alt="Avatar"
-            src={user.avatar}
-            sx={{
-              width: 100,
-              height: 100,
-            }}
-          />
-          <VStack>
-            <Typography variant="h4">{user.name}</Typography>
-            <Info>
-              <HStackGap>
+    <>
+      <Content>
+        <Border>
+          <Header>
+            <Avatar
+              alt="Avatar"
+              src={user.avatar}
+              sx={{
+                width: 100,
+                height: 100,
+              }}
+            />
+            <VStack>
+              <Typography variant="h4">{user.name}</Typography>
+              <Info>
+                <HStackGap>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                      textTransform: "none",
+                      borderRadius: 16,
+                      color: "blue",
+                      borderColor: "blue",
+                    }}
+                    startIcon={<FlashOn />}
+                  >
+                    Avalable now
+                  </Button>
+                  <HStack>
+                    <IconButton sx={{ color: "blue" }}>
+                      <Stars />
+                    </IconButton>
+                    <Typography>Top rated</Typography>
+                  </HStack>
+                </HStackGap>
+              </Info>
+            </VStack>
+          </Header>
+          <Grid container spacing={0}>
+            <Grid
+              item
+              xs={4}
+              style={{
+                borderRight: "1px solid #ccc",
+
+                width: "300px",
+                height: "300px",
+                overflow: "hidden",
+              }}
+            >
+              <VStackPadding>
+                <CutText variant="body1">{user.position}</CutText>
                 <Button
                   variant="outlined"
-                  size="small"
                   sx={{
-                    textTransform: "none",
                     borderRadius: 16,
-                    color: "blue",
-                    borderColor: "blue",
+                    textTransform: "none",
                   }}
-                  startIcon={<FlashOn />}
+                  endIcon={<ArrowRight />}
                 >
-                  Avalable now
+                  All work
                 </Button>
-                <HStack>
-                  <IconButton sx={{ color: "blue" }}>
-                    <Stars />
-                  </IconButton>
-                  <Typography>Top rated</Typography>
-                </HStack>
-              </HStackGap>
-            </Info>
-          </VStack>
-        </Header>
-        <Grid container spacing={0}>
-          <Grid
-            item
-            xs={4}
-            style={{
-              borderRight: "1px solid #ccc",
-            }}
-          >
-            <VStackPadding>
-              <Typography
-                variant="body1"
-                sx={{
-                  borderRadius: 16,
-                }}
-              >
-                {user.position}
-              </Typography>
-              <Button
-                variant="outlined"
-                sx={{
-                  borderRadius: 16,
-                  textTransform: "none",
-                }}
-                endIcon={<ArrowRight />}
-              >
-                All work
-              </Button>
-            </VStackPadding>
-          </Grid>
-          <Grid item xs={8} style={{ padding: "8px" }}>
-            <VStackPadding>
-              <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                Contacts:
-              </Typography>
-              {user.contacts.map((contact, index) => (
-                <Typography key={index} variant="body1">
-                  {contact + "@" + user.email.split("@")[1]}
+              </VStackPadding>
+            </Grid>
+            <Grid
+              item
+              xs={8}
+              style={{
+                width: "300px",
+                height: "300px",
+                overflow: "hidden",
+              }}
+            >
+              <VStackPadding>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                  Contacts:
                 </Typography>
-              ))}
-            </VStackPadding>
+                {isFetchingContacts ? (
+                  <Box
+                    display="flex"
+                    width="100%"
+                    height="160px"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <CircularProgress size={48} />
+                  </Box>
+                ) : (
+                  contacts.map((contact, index) => (
+                    <CutText key={index} variant="body1">
+                      {contact}
+                    </CutText>
+                  ))
+                )}
+              </VStackPadding>
+            </Grid>
           </Grid>
-        </Grid>
-      </Border>
-    </Content>
+        </Border>
+      </Content>
+      {/* Snackbar for displaying errors */}
+      <Snackbar open={!!error} message={error} />
+    </>
   );
 }
 
