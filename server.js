@@ -36,7 +36,7 @@ app.post("/login", async (req, res) => {
   console.log("BODY", req.body);
   try {
     const response = await fetch(
-      "https://api.dev.hakkaren.lastingdynamics.net/v1/auth/login/",
+      "https://api.dev.app.hakkaren.co/v1/auth/login/",
       {
         method: "POST",
         headers: {

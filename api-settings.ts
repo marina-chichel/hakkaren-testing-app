@@ -1,14 +1,13 @@
 export const connectionString =
-  "mongodb://65cb8ff7c04edaf78fcf47dd_65d4958a6efd64dc8283a927_user:kLIwm*%3ElDD%23b@167.235.55.35:30558/65cb8ff7c04edaf78fcf47dd_65d4958a6efd64dc8283a927?authSource=admin";
+  "mongodb://65e1e37412446e5d764f1db7_65e9ae23421b6bafb651e6f9_user:fibqaFqPSjS-@a1d82b4a7937a4fa6883a0a39d1b7deb-1860942038.us-east-2.elb.amazonaws.com:27017/65e1e37412446e5d764f1db7_65e9ae23421b6bafb651e6f9?authSource=admin";
 
-export const executeURL =
-  "https://api.dev.hakkaren.lastingdynamics.net/v1/inceptors/65d4e7c86efd64dc82843d14/execute";
+export const hakkarenURL = "https://api.dev.app.hakkaren.co/v1";
+// const hakkarenURL = "https://api.dev.hakkaren.lastingdynamics.net/v1";
+export const executeURL = `${hakkarenURL}/inceptors/65e9b0b4421b6bafb651ecf5/execute`;
 
-export const resetURL =
-  "https://api.dev.hakkaren.lastingdynamics.net/v1/projects/65d4958a6efd64dc8283a927/databases/reset";
+export const resetURL = `${hakkarenURL}/projects/65e9ae23421b6bafb651e6f9/databases/reset`;
 
-export const loginURL =
-  "https://api.dev.hakkaren.lastingdynamics.net/v1/auth/login/";
+export const loginURL = `${hakkarenURL}/auth/login/`;
 
 export const generateWithAI = false;
 
