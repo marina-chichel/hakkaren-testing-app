@@ -170,7 +170,7 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
     );
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} className="user-list">
       {/* Render the modal */}
       <Modal open={isModalOpen} onClose={handleCloseModal}>
         <> {!!selectedUser && <UserInfo user={selectedUser} />}</>
@@ -207,7 +207,8 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
                 <HStack>
                   <Stars>{getStars(row.rate)}</Stars>
                   <DeleteRowIcon
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       deleteUser(row.id);
                     }}
                   />

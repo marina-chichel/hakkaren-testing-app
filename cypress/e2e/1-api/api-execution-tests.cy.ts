@@ -18,7 +18,7 @@ describe("Test Hakkaren API", () => {
     // cy.pause();
   });
 
-  it("The pagination component does not exist when the user list is empty, and appears when it is full", () => {
+  it("The pagination component does not exist when the list is empty, and appears when it is full", () => {
     const authToken = localStorage.getItem("token");
     expect(authToken).not.to.be.null;
 
@@ -51,7 +51,7 @@ describe("Test Hakkaren API", () => {
     cy.get('[aria-label="pagination navigation"]').should("exist");
   });
 
-  it("The pagination component contains one page for 5 users and 2 for 10", () => {
+  it("The pagination component contains one page for 5 people and 2 pages for 10", () => {
     const authToken = localStorage.getItem("token");
     expect(authToken).not.to.be.null;
 
@@ -77,12 +77,23 @@ describe("Test Hakkaren API", () => {
     });
   });
 
-  it("Clicking the first card should show the user's modal", () => {
-    const authToken = localStorage.getItem("token");
-    expect(authToken).not.to.be.null;
-
+  it("Click on a card should open the info modal", () => {
     cy.get(".user-card").first().click();
     cy.get(".user-info").should("exist");
     cy.get("body").click(0, 0); // click outside
+  });
+
+  it("The pagination works: clicking in the second page  button goes to that page", () => {
+    cy.get('[aria-label="pagination navigation"]').should("exist");
+
+    cy.get(".user-list").children().should("have.length", 8);
+
+    cy.get('[aria-label="pagination navigation"]').within(() => {
+      cy.get("ul").children().should("have.length", 4);
+
+      cy.contains("2").click();
+    });
+
+    cy.get(".user-list").children().should("have.length", 2);
   });
 });
