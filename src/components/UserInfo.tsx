@@ -75,7 +75,7 @@ function UserInfo({ user }: { user: User }) {
 
   return (
     <>
-      <Content>
+      <Content className="user-info">
         <Border>
           <Header>
             <Avatar

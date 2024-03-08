@@ -178,7 +178,10 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
 
       {users.map((row, index) => (
         <Grid item xs={12} sm={12} md={12} lg={12} key={`${row.name}-${index}`}>
-          <StyledCard onClick={() => handleUserClick(row)}>
+          <StyledCard
+            onClick={() => handleUserClick(row)}
+            className="user-card"
+          >
             <StyledCardContent>
               <Header>
                 <HStack>
