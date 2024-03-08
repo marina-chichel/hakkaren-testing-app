@@ -1,40 +1,52 @@
+import { resetURL, executeURL, generateWithAI } from "../../../api-settings";
+
 describe("Test Hakkaren API", () => {
   beforeEach(() => {
     cy.intercept("http://localhost:3000/connect-to-mongodb").as("connect");
     cy.intercept("http://localhost:3000").as("fetch");
-    cy.intercept("http://localhost:3000/execute").as("execute");
-    cy.intercept("http://localhost:3000/reset").as("reset");
+    // cy.intercept("http://localhost:3000/execute").as("execute");
+    // cy.intercept("http://localhost:3000/reset").as("reset");
 
     cy.visit("/");
     cy.contains("Continue with Email").click();
+    cy.wait("@connect");
+    cy.wait("@fetch");
     cy.pause();
   });
 
   afterEach(() => {
-    cy.pause();
+    // cy.pause();
   });
 
-  it("Fetch and Populate table", () => {
+  it("Crear users list", () => {
+    const authToken = localStorage.getItem("token");
+    expect(authToken).not.to.be.null;
+
+    cy.request("PUT", "http://localhost:3000/reset", {
+      resetURL,
+      authToken,
+    })
+      .its("body")
+      .should("be.an", "object")
+      .and("have.property", "success", true);
+    cy.reload();
     cy.wait("@connect");
-    cy.contains("Fetch other users").should("not.be.disabled");
     cy.wait("@fetch");
-    cy.get("body").then(($body) => {
-      if ($body.find("tbody").length > 0) {
-        cy.get("tbody").then(($table) => {
-          const usersNumber = $table.children().length;
-          cy.log(`${usersNumber} records found.`);
-          cy.contains("Fetch other users").click();
-          cy.wait("@execute", { timeout: 30000 });
-          cy.get("tbody")
-            .children()
-            .should("have.length.greaterThan", usersNumber);
-        });
-      } else {
-        cy.log("No records found.");
-        cy.contains("Fetch other users").click();
-        cy.wait("@execute", { timeout: 30000 });
-        cy.get("tbody").children().should("have.length.greaterThan", 0);
-      }
-    });
+
+    cy.contains("NO RECORDS FOUND").should("exist");
+
+    cy.request("POST", "http://localhost:3000/execute", {
+      executeURL,
+      authToken,
+      generateWithAI,
+    })
+      .its("body")
+      .should("be.an", "object")
+      .and("have.property", "success", true);
+    cy.reload();
+    cy.wait("@connect");
+    cy.wait("@fetch");
+
+    cy.contains("Hourly rate").should("exist");
   });
 });
