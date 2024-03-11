@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   connectionString,
   resetURL,
@@ -6,6 +6,8 @@ import {
   generateWithAI,
   host,
 } from "../../../api-settings";
+
+const CARDS_ON_PAGE = 8;
 
 type UserResp = {
   _id: string;
@@ -40,6 +42,7 @@ const useAPI = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [currPage, setCurrentPage] = useState(1);
 
   const [error, setError] = useState("");
   const [users, setUsers] = useState<User[]>([]);
@@ -211,7 +214,9 @@ const useAPI = () => {
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
+    setCurrentPage(1);
   };
+
   const filteredUsers = users.filter((user) =>
     Object.values(user).some(
       (field) =>
@@ -220,10 +225,36 @@ const useAPI = () => {
     )
   );
 
+  const noUsers = filteredUsers.length === 0;
+
+  const numberOfPages = filteredUsers.length
+    ? Math.ceil(filteredUsers.length / CARDS_ON_PAGE)
+    : 1;
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedUsers = useMemo(
+    () =>
+      filteredUsers.slice(
+        (currPage - 1) * CARDS_ON_PAGE,
+        currPage * CARDS_ON_PAGE
+      ),
+    [filteredUsers.length, currPage]
+  );
+
+  useEffect(() => {
+    if (paginatedUsers.length === 0 && currPage > 1) {
+      setCurrentPage((page) => page - 1);
+    }
+  }, [paginatedUsers.length]);
+
   return {
     handleGenerate,
     handleReset,
-    // users,
+    filteredUsers,
+    noUsers,
     deleteUser,
     error,
     connectDB,
@@ -231,9 +262,12 @@ const useAPI = () => {
     isGenerating,
     isResetting,
 
-    users: filteredUsers,
+    currPage,
+    numberOfPages,
     searchQuery,
+    paginatedUsers,
     handleSearchChange,
+    handlePageChange,
   };
 };
 

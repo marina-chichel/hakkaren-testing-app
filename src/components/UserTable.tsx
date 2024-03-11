@@ -20,7 +20,7 @@ import {
   StarOutline,
   WorkspacePremium,
 } from "@mui/icons-material";
-import { useState } from "react";
+import React, { useState } from "react";
 import UserInfo from "./UserInfo";
 
 type UserTableParams = {
@@ -237,4 +237,4 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
   );
 };
 
-export default UserTable;
+export default React.memo(UserTable);
