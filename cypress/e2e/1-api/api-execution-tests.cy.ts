@@ -96,4 +96,20 @@ describe("Test Hakkaren API", () => {
 
     cy.get(".user-list").children().should("have.length", 2);
   });
+
+  it("Can delete one entry", () => {
+    cy.get('[aria-label="pagination navigation"]').within(() => {
+      cy.contains("2").click();
+    });
+
+    cy.get(".user-list").then(($list) => {
+      const usersNumber = $list.children().length;
+
+      cy.get('[data-testid="DeleteIcon"]').first().click();
+
+      cy.get(".user-list")
+        .children()
+        .should("have.length", usersNumber - 1);
+    });
+  });
 });
