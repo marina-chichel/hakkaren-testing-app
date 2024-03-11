@@ -201,7 +201,9 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
 
                   <NamePosition>
                     <Name variant="caption">{row.name}</Name>
-                    <Position variant="subtitle1">{row.position}</Position>
+                    <Position variant="subtitle1" className="position">
+                      {row.position}
+                    </Position>
                   </NamePosition>
                 </HStack>
                 <HStack>

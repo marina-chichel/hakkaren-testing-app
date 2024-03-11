@@ -42,6 +42,7 @@ function Users({ logOut }: { logOut: () => void }) {
     numberOfPages,
     paginatedUsers,
     handlePageChange,
+    clearSearch,
   } = useAPI();
 
   const IconBtn = styled(IconButton)`
@@ -90,7 +91,7 @@ function Users({ logOut }: { logOut: () => void }) {
               endAdornment: (
                 <InputAdornment position="end">
                   {searchQuery && (
-                    <IconButton onClick={() => {}}>
+                    <IconButton onClick={() => clearSearch()}>
                       <ClearSharp />
                     </IconButton>
                   )}

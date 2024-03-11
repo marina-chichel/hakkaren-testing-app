@@ -112,4 +112,18 @@ describe("Test Hakkaren API", () => {
         .should("have.length", usersNumber - 1);
     });
   });
+
+  it("Search works", () => {
+    cy.get(".position")
+      .first()
+      .then(($position) => {
+        const userPosition = $position.first().text();
+
+        cy.get(`input[placeholder="Search..."]`).type(userPosition, {
+          delay: 100,
+        });
+      });
+
+    cy.get(".position").should("have.length", 1);
+  });
 });

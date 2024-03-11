@@ -235,6 +235,10 @@ const useAPI = () => {
     setCurrentPage(page);
   };
 
+  const clearSearch = () => {
+    setSearchQuery("");
+  };
+
   const paginatedUsers = useMemo(
     () =>
       filteredUsers.slice(
@@ -267,6 +271,7 @@ const useAPI = () => {
     searchQuery,
     paginatedUsers,
     handleSearchChange,
+    clearSearch,
     handlePageChange,
   };
 };
