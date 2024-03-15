@@ -11,7 +11,7 @@ describe("Test Hakkaren API", () => {
     cy.contains("Continue with Email").click();
     cy.wait("@connect");
     cy.wait("@fetch");
-    // cy.pause();
+    cy.pause();
   });
 
   afterEach(() => {
