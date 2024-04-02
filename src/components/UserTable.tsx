@@ -47,6 +47,7 @@ const StyledCardContent = styled(CardContent)(() => ({
   flexDirection: "column",
   gap: 18,
   alignItems: "flex-start",
+  cursor: "pointer",
 }));
 
 const Header = styled(Box)(() => ({
