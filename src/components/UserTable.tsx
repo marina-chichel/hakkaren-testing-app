@@ -96,7 +96,7 @@ const DeleteRowIcon = styled(DeleteIcon)(() => ({
   fill: "lightgray",
   cursor: "pointer",
   "&:hover": {
-    fill: "darkgray",
+    fill: "red",
   },
 }));
 
