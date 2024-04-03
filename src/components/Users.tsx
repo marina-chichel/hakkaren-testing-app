@@ -11,9 +11,6 @@ import {
 import {
   Search,
   Logout,
-  NotificationImportant,
-  QuestionMark,
-  Send,
   ClearSharp,
   PersonAdd,
   DeleteOutline,
@@ -46,10 +43,6 @@ function Users({ logOut }: { logOut: () => void }) {
     handlePageChange,
     clearSearch,
   } = useAPI();
-
-  const IconBtn = styled(IconButton)`
-    color: #46b646;
-  `;
 
   return (
     <>
@@ -115,6 +108,7 @@ function Users({ logOut }: { logOut: () => void }) {
             variant="text"
             startIcon={<DeleteOutline />}
             onClick={handleReset}
+            disabled={noUsers}
           >
             Clear
           </Button>
