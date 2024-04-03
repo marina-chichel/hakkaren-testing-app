@@ -11,7 +11,7 @@ import {
   styled,
 } from "@mui/material";
 import { User } from "./hooks/useAPI";
-import { ArrowRight, FlashOn, Stars } from "@mui/icons-material";
+import { ArrowRight, Close, FlashOn, Stars } from "@mui/icons-material";
 import useContacts from "./hooks/useContacts";
 import { CutText } from "./base/Basic";
 
@@ -43,7 +43,6 @@ const HStackGap = styled(HStack)(() => ({
 
 const Header = styled(HStackGap)(() => ({
   borderBottom: "1px solid lightgrey",
-  padding: "24px",
 }));
 
 const VStack = styled(Box)(() => ({
@@ -68,7 +67,13 @@ const Info = styled(Box)(() => ({
   justifyContent: "space-between",
 }));
 
-function UserInfo({ user }: { user: User }) {
+function UserInfo({
+  user,
+  closeModal,
+}: {
+  user: User;
+  closeModal: () => void;
+}) {
   const { contacts, error, isFetchingContacts } = useContacts(
     user?.contactsId || ""
   );
@@ -77,41 +82,46 @@ function UserInfo({ user }: { user: User }) {
     <>
       <Content className="user-info">
         <Border>
-          <Header>
-            <Avatar
-              alt="Avatar"
-              src={user.avatar}
-              sx={{
-                width: 100,
-                height: 100,
-              }}
-            />
-            <VStack>
-              <Typography variant="h4">{user.name}</Typography>
-              <Info>
-                <HStackGap>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                      textTransform: "none",
-                      borderRadius: 16,
-                      color: "blue",
-                      borderColor: "blue",
-                    }}
-                    startIcon={<FlashOn />}
-                  >
-                    Avalable now
-                  </Button>
-                  <HStack>
-                    <IconButton sx={{ color: "blue" }}>
-                      <Stars />
-                    </IconButton>
-                    <Typography>Top rated</Typography>
-                  </HStack>
-                </HStackGap>
-              </Info>
-            </VStack>
+          <Header sx={{ justifyContent: "space-between" }}>
+            <Box display="flex" gap={3} p={3}>
+              <Avatar
+                alt="Avatar"
+                src={user.avatar}
+                sx={{
+                  width: 100,
+                  height: 100,
+                }}
+              />
+              <VStack>
+                <Typography variant="h4">{user.name}</Typography>
+                <Info>
+                  <HStackGap>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        textTransform: "none",
+                        borderRadius: 16,
+                        color: "blue",
+                        borderColor: "blue",
+                      }}
+                      startIcon={<FlashOn />}
+                    >
+                      Avalable now
+                    </Button>
+                    <HStack>
+                      <IconButton sx={{ color: "blue" }}>
+                        <Stars />
+                      </IconButton>
+                      <Typography>Top rated</Typography>
+                    </HStack>
+                  </HStackGap>
+                </Info>
+              </VStack>
+            </Box>
+            <IconButton onClick={closeModal} sx={{ alignSelf: "flex-start" }}>
+              <Close />
+            </IconButton>
           </Header>
           <Grid container spacing={0}>
             <Grid

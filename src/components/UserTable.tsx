@@ -157,6 +157,10 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
     setIsModalOpen(false);
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   if (isFetching)
     return (
       <Box
@@ -174,7 +178,11 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
     <Grid container spacing={2} className="user-list">
       {/* Render the modal */}
       <Modal open={isModalOpen} onClose={handleCloseModal}>
-        <> {!!selectedUser && <UserInfo user={selectedUser} />}</>
+        <>
+          {!!selectedUser && (
+            <UserInfo user={selectedUser} closeModal={closeModal} />
+          )}
+        </>
       </Modal>
 
       {users.map((row, index) => (
