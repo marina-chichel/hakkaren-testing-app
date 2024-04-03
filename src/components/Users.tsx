@@ -5,7 +5,6 @@ import {
   TextField,
   IconButton,
   Typography,
-  styled,
   InputAdornment,
 } from "@mui/material";
 import {
@@ -22,6 +21,8 @@ import Pagination from "@mui/material/Pagination";
 import EmptyTable from "./EmptyTable";
 import LanSelector from "./atoms/LanSelector";
 import { Center } from "./base/Basic";
+import DeleteConfirmationDialog from "./ConfirmationDialog";
+import { useState } from "react";
 
 const UsersHeader = Box;
 
@@ -47,6 +48,17 @@ function Users({ logOut }: { logOut: () => void }) {
   } = useAPI();
 
   const isLoading = isFetching || isResetting || isGenerating;
+
+  const [isOpen, setOpen] = useState(false);
+
+  const openDialog = () => {
+    setOpen(true);
+  };
+
+  const closeDialog = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <UsersHeader
@@ -110,7 +122,7 @@ function Users({ logOut }: { logOut: () => void }) {
           <Button
             variant="text"
             startIcon={<DeleteOutline />}
-            onClick={handleReset}
+            onClick={openDialog}
             disabled={noUsers}
           >
             Clear
@@ -181,6 +193,13 @@ function Users({ logOut }: { logOut: () => void }) {
             Retry
           </Button>
         }
+      />
+
+      <DeleteConfirmationDialog
+        isOpen={isOpen}
+        closeDialog={closeDialog}
+        handleDelete={handleReset}
+        text="Are you sure you want to delete everything?"
       />
     </>
   );

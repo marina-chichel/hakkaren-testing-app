@@ -22,6 +22,7 @@ import {
 } from "@mui/icons-material";
 import React, { useState } from "react";
 import UserInfo from "./UserInfo";
+import DeleteConfirmationDialog from "./ConfirmationDialog";
 
 type UserTableParams = {
   users: User[];
@@ -147,6 +148,15 @@ const NamePosition = styled(Box)({
 const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpen, setOpen] = useState(false);
+
+  const openDialog = () => {
+    setOpen(true);
+  };
+
+  const closeDialog = () => {
+    setOpen(false);
+  };
 
   const handleUserClick = (user: User) => {
     setSelectedUser(user);
@@ -161,7 +171,9 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
     setIsModalOpen(false);
   };
 
-  console.log(isFetching);
+  const handleDeleteMember = () => {
+    selectedUser && deleteUser(selectedUser?.id);
+  };
 
   if (isFetching)
     return (
@@ -186,7 +198,12 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
           )}
         </>
       </Modal>
-
+      <DeleteConfirmationDialog
+        isOpen={isOpen}
+        closeDialog={closeDialog}
+        handleDelete={handleDeleteMember}
+        text="Are you sure you want to delete this member?"
+      />
       {users.map((row, index) => (
         <Grid item xs={12} sm={12} md={12} lg={12} key={`${row.name}-${index}`}>
           <StyledCard
@@ -222,7 +239,8 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
                   <DeleteRowIcon
                     onClick={(e) => {
                       e.stopPropagation();
-                      deleteUser(row.id);
+                      setSelectedUser(row);
+                      openDialog();
                     }}
                   />
                 </HStack>
