@@ -1,17 +1,25 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography, styled } from "@mui/material";
 import { Sort } from "@mui/icons-material"; // Import icons for search, filter, and sort
 import { User } from "./hooks/useAPI";
 import UserGraph from "./UserGraph";
-import { CutText } from "./base/Basic";
-
 interface P {
   isEmpty: boolean;
   users: User[];
 }
+
+const Category = styled(Typography)`
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const CategoriesBox = Box;
+
 function Tools({ isEmpty, users }: P) {
   return (
     <Box
-      py={4}
+      py={2}
       borderRight="1px solid #e0e0e0"
       display="flex"
       flexDirection="column"
@@ -29,23 +37,36 @@ function Tools({ isEmpty, users }: P) {
         </Button>
       </Box>
 
-      <CutText variant="body1" fontWeight={600}>
+      <Typography variant="body1" fontWeight={600}>
         Category
-      </CutText>
-      <CutText variant="body2">All categories</CutText>
-      <CutText variant="body2">Accounting & Consulting</CutText>
-      <CutText variant="body2">Admin Support</CutText>
-      <CutText variant="body2">Customer Service</CutText>
-      <CutText variant="body2">Data Science & Analytics</CutText>
-      <CutText variant="body2">Design & Creative</CutText>
-      <CutText variant="body2">Engineering & Architecture</CutText>
-      <CutText variant="body2">IT & Networking</CutText>
-      <CutText variant="body2">Legal</CutText>
-      <CutText variant="body2">Web, Mobile & Software Dev</CutText>
-      <CutText variant="body2">Sales & Marketing</CutText>
+      </Typography>
+      <CategoriesBox
+        display="flex"
+        flexDirection="column"
+        gap={2}
+        style={{
+          overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
+          msOverflowStyle: "none",
+          scrollbarWidth: "none",
+        }}
+      >
+        <Category variant="body2">All categories</Category>
+        <Category variant="body2">Accounting & Consulting</Category>
+        <Category variant="body2">Admin Support</Category>
+        <Category variant="body2">Customer Service</Category>
+        <Category variant="body2">Data Science & Analytics</Category>
+        <Category variant="body2">Design & Creative</Category>
+        <Category variant="body2">Engineering & Architecture</Category>
+        <Category variant="body2">IT & Networking</Category>
+        <Category variant="body2">Legal</Category>
+        <Category variant="body2">Web, Mobile & Software Dev</Category>
+        <Category variant="body2">Sales & Marketing</Category>
+      </CategoriesBox>
+
       {!isEmpty && (
         <Box
-          mt={4}
+          mt={2}
           pr={4}
           display="flex"
           flexDirection={"column"}

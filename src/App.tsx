@@ -1,5 +1,5 @@
 import React, { Component, ReactNode, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import Users from "./components/Users";
 import Login from "./components/Login";
 
@@ -41,22 +41,25 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <Box display="flex" flexDirection="column" style={{ height: "100vh" }}>
-        <Box flex={1}>
-          {isLoggedIn ? (
-            <Users logOut={logOut} />
-          ) : (
-            <Login setIsLoggedIn={setIsLoggedIn} />
-          )}
-        </Box>
+      <Container
+        maxWidth="lg"
+        style={{
+          height: "100vh",
+          display: "grid",
+          gridTemplateRows: "auto  1fr auto",
+        }}
+      >
+        {isLoggedIn ? (
+          <Users logOut={logOut} />
+        ) : (
+          <Login setIsLoggedIn={setIsLoggedIn} />
+        )}
         <Box
           sx={{
-            py: 3,
-            px: 6,
+            py: 2,
             bgcolor: "primary.900",
             color: "white",
             textAlign: "center",
-            mx: 28,
             mb: 2,
             borderRadius: 2,
             fontSize: 12,
@@ -64,7 +67,7 @@ function App() {
         >
           © 2015 - 2024 WorkWave Global Inc. • Privacy Policy
         </Box>
-      </Box>
+      </Container>
     </ErrorBoundary>
   );
 }

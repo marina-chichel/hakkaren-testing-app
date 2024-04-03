@@ -11,7 +11,6 @@ import {
 import {
   Search,
   Logout,
-  ArrowDropDown,
   NotificationImportant,
   QuestionMark,
   Send,
@@ -21,10 +20,13 @@ import {
 } from "@mui/icons-material";
 import UserTable from "./UserTable";
 import useAPI from "./hooks/useAPI";
-import UK from "../assets/UK.png";
 import Tools from "./Tools";
 import Pagination from "@mui/material/Pagination";
 import EmptyTable from "./EmptyTable";
+import LanSelector from "./atoms/LanSelector";
+import { Center } from "./base/Basic";
+
+const UsersHeader = Box;
 
 function Users({ logOut }: { logOut: () => void }) {
   const {
@@ -51,9 +53,9 @@ function Users({ logOut }: { logOut: () => void }) {
 
   return (
     <>
-      <Box
+      <UsersHeader
         display="flex"
-        sx={{ py: 2, mx: 28 }}
+        sx={{ py: 2 }}
         alignItems="center"
         justifyContent="space-between"
         gap={3}
@@ -101,7 +103,7 @@ function Users({ logOut }: { logOut: () => void }) {
           />
         </Box>
 
-        <Box display="flex" alignItems="center">
+        <Center>
           <IconBtn onClick={handleGenerate}>
             <PersonAdd />
           </IconBtn>
@@ -120,29 +122,48 @@ function Users({ logOut }: { logOut: () => void }) {
           <IconBtn onClick={logOut}>
             <Logout />
           </IconBtn>
-          <Box display="flex" alignItems="center" gap={1} ml={2}>
-            <img src={UK} width={16} alt="UK flag" />
-            <Typography color="primary.900">English</Typography>
-            <ArrowDropDown />
-          </Box>
-        </Box>
-      </Box>
+          <LanSelector />
+        </Center>
+      </UsersHeader>
 
-      <Box display="flex" mx={28} gap={4}>
+      <Box
+        display="flex"
+        gap={4}
+        style={{
+          overflowY: "auto",
+        }}
+        pb={2}
+      >
         <Tools isEmpty={noUsers} users={filteredUsers} />
-        <Box flex="1" p={2}>
+        <Box flex={1}>
           {noUsers ? (
             <EmptyTable />
           ) : (
-            <>
-              <UserTable
-                users={paginatedUsers}
-                deleteUser={deleteUser}
-                isFetching={isFetching}
-              />
+            <Box
+              style={{
+                height: "100%",
+                display: "grid",
+                gridTemplateRows: "1fr auto",
+              }}
+            >
+              <Box
+                p={2}
+                style={{
+                  overflowY: "auto",
+                  WebkitOverflowScrolling: "touch",
+                  msOverflowStyle: "none",
+                  scrollbarWidth: "none",
+                }}
+              >
+                <UserTable
+                  users={paginatedUsers}
+                  deleteUser={deleteUser}
+                  isFetching={isFetching}
+                />
+              </Box>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Pagination
-                  sx={{ p: 3 }}
+                  sx={{ p: 1 }}
                   count={numberOfPages}
                   page={currPage}
                   variant="outlined"
@@ -150,20 +171,20 @@ function Users({ logOut }: { logOut: () => void }) {
                   onChange={handlePageChange}
                 />
               </Box>
-            </>
+            </Box>
           )}
-          {/* Snackbar for displaying errors */}
-          <Snackbar
-            open={!!error}
-            message={error}
-            action={
-              <Button color="inherit" size="small" onClick={connectDB}>
-                Retry
-              </Button>
-            }
-          />
         </Box>
       </Box>
+
+      <Snackbar
+        open={!!error}
+        message={error}
+        action={
+          <Button color="inherit" size="small" onClick={connectDB}>
+            Retry
+          </Button>
+        }
+      />
     </>
   );
 }

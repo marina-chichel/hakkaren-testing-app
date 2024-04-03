@@ -12,12 +12,14 @@ import { EMAIL, PASSWORD } from "../../api-settings";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { Apple, ArrowDropDown, Google } from "@mui/icons-material";
-import UK from "../assets/UK.png";
+import { Apple, Google } from "@mui/icons-material";
+import LanSelector from "./atoms/LanSelector";
 
 interface P {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
 }
+
+const LoginHeader = Box;
 
 function Login({ setIsLoggedIn }: P) {
   const { handleLogin, error, setError, isLoading } = useLogin({
@@ -42,28 +44,29 @@ function Login({ setIsLoggedIn }: P) {
 
   return (
     <>
-      <Box display="flex" justifyContent="space-between" sx={{ py: 2, mx: 28 }}>
+      <LoginHeader display="flex" justifyContent="space-between" sx={{ py: 2 }}>
         <Typography variant="h5" component="h5" color="#1fdf1f">
           WorkWave
         </Typography>
 
-        <Box display="flex" alignItems="center" gap={1}>
-          <img src={UK} width={16} alt="UK flag" />
-          <Typography>English</Typography>
-          <ArrowDropDown />
-        </Box>
-      </Box>
-      <Box display="flex" justifyContent="center" my={2}>
+        <LanSelector />
+      </LoginHeader>
+      <Box
+        display="flex"
+        justifyContent="center"
+        my={2}
+        style={{ overflowY: "auto" }}
+      >
         <Box
           display="flex"
           flexDirection="column"
           gap="36px"
           justifyContent="center"
           alignItems="center"
-          width="500px"
           borderRadius={3}
           p={4}
           sx={{ border: "1px solid lightgrey" }}
+          height={600}
         >
           <Typography variant="h3" component="h3" color="primary">
             Sign In
@@ -149,9 +152,8 @@ function Login({ setIsLoggedIn }: P) {
             Sign Up
           </Button>
         </Box>
-
-        <Snackbar open={!!error} message={error} />
       </Box>
+      <Snackbar open={!!error} message={error} />
     </>
   );
 }
