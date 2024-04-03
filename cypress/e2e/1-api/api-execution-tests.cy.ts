@@ -11,7 +11,7 @@ describe("Test Hakkaren API", () => {
     cy.contains("Continue with Email").click();
     cy.wait("@connect");
     cy.wait("@fetch");
-    cy.pause();
+    // cy.pause();
   });
 
   afterEach(() => {
@@ -106,6 +106,8 @@ describe("Test Hakkaren API", () => {
       const usersNumber = $list.children().length;
 
       cy.get('[data-testid="DeleteIcon"]').first().click();
+
+      cy.contains("Delete").click();
 
       cy.get(".user-list")
         .children()
