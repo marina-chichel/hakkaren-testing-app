@@ -64,6 +64,7 @@ const useAPI = () => {
     } catch (error) {
       setError("Error connecting to MongoDB");
       console.error("Error connecting to MongoDB from client:", error);
+    } finally {
       setIsFetching(false);
     }
   };
