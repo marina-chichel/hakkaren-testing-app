@@ -48,7 +48,7 @@ function Users({ logOut }: { logOut: () => void }) {
   } = useAPI();
 
   const IconBtn = styled(IconButton)`
-    color: #21642b;
+    color: #46b646;
   `;
 
   return (
@@ -103,25 +103,25 @@ function Users({ logOut }: { logOut: () => void }) {
           />
         </Box>
 
-        <Center>
-          <IconBtn onClick={handleGenerate}>
-            <PersonAdd />
-          </IconBtn>
-          <IconBtn onClick={handleReset}>
-            <DeleteOutline />
-          </IconBtn>
-          <IconBtn>
-            <Send />
-          </IconBtn>
-          <IconBtn>
-            <QuestionMark />
-          </IconBtn>
-          <IconBtn>
-            <NotificationImportant />
-          </IconBtn>
-          <IconBtn onClick={logOut}>
-            <Logout />
-          </IconBtn>
+        <Center gap={2}>
+          <Button
+            variant="text"
+            startIcon={<PersonAdd />}
+            onClick={handleGenerate}
+          >
+            Add
+          </Button>
+          <Button
+            variant="text"
+            startIcon={<DeleteOutline />}
+            onClick={handleReset}
+          >
+            Clear
+          </Button>
+          <Button variant="text" startIcon={<Logout />} onClick={logOut}>
+            Logout
+          </Button>
+
           <LanSelector />
         </Center>
       </UsersHeader>
