@@ -161,12 +161,14 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
     setIsModalOpen(false);
   };
 
+  console.log(isFetching);
+
   if (isFetching)
     return (
       <Box
         display="flex"
         width="100%"
-        height="160px"
+        height="100%"
         justifyContent="center"
         alignItems="center"
       >

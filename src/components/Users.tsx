@@ -34,6 +34,8 @@ function Users({ logOut }: { logOut: () => void }) {
     error,
     connectDB,
     isFetching,
+    isGenerating,
+    isResetting,
     searchQuery,
     handleSearchChange,
     noUsers,
@@ -44,6 +46,7 @@ function Users({ logOut }: { logOut: () => void }) {
     clearSearch,
   } = useAPI();
 
+  const isLoading = isFetching || isResetting || isGenerating;
   return (
     <>
       <UsersHeader
@@ -130,7 +133,7 @@ function Users({ logOut }: { logOut: () => void }) {
       >
         <Tools isEmpty={noUsers} users={filteredUsers} />
         <Box flex={1}>
-          {noUsers ? (
+          {noUsers && !isLoading ? (
             <EmptyTable />
           ) : (
             <Box
@@ -152,7 +155,7 @@ function Users({ logOut }: { logOut: () => void }) {
                 <UserTable
                   users={paginatedUsers}
                   deleteUser={deleteUser}
-                  isFetching={isFetching}
+                  isFetching={isLoading}
                 />
               </Box>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
