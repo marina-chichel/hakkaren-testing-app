@@ -1,5 +1,3 @@
-import { resetURL, executeURL, generateWithAI } from "../../../api-settings";
-
 describe("Test Hakkaren API", () => {
   beforeEach(() => {
     cy.intercept("http://localhost:3000/connect-to-mongodb").as("connect");
@@ -11,7 +9,7 @@ describe("Test Hakkaren API", () => {
     cy.contains("Continue with Email").click();
     cy.wait("@connect");
     cy.wait("@fetch");
-    cy.pause();
+    // cy.pause();
   });
 
   afterEach(() => {
@@ -22,36 +20,67 @@ describe("Test Hakkaren API", () => {
     const authToken = localStorage.getItem("token");
     expect(authToken).not.to.be.null;
 
-    cy.request("PUT", "http://localhost:3000/reset", {
-      resetURL,
-      authToken,
+    // delete all people
+    cy.request({
+      url: "https://api.dev.app.hakkaren.co/v1/projects/663514aba3ff7dfa67ec0405/databases/reset",
+      method: "PUT",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWUxZTM3NDEyNDQ2ZTVkNzY0ZjFkYjciLCJpYXQiOjE3MTQ5ODMwNTEsImV4cCI6MTcxNTA2OTQ1MX0.89F-1aPi8jUQnf2AB1ZTDFTqtLeJ_1HndKkKZjy7gvk",
+      },
+      body: {
+        resetTo: "empty",
+      },
     })
       .its("body")
       .should("be.an", "object")
       .and("have.property", "success", true);
+
     cy.reload();
-    cy.wait("@connect");
-    cy.wait("@fetch");
+    // cy.wait("@connect");
+    // cy.wait("@fetch");
 
     cy.contains("NO RECORDS FOUND").should("exist");
     cy.get('[aria-label="pagination navigation"]').should("not.exist");
 
-    cy.request("POST", "http://localhost:3000/execute", {
-      executeURL,
-      authToken,
-      generateWithAI,
+    // add 5 people
+    cy.request({
+      url: "https://api.dev.app.hakkaren.co/v1/inceptors/663514ada3ff7dfa67ec0448/execute",
+      method: "POST",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWUxZTM3NDEyNDQ2ZTVkNzY0ZjFkYjciLCJpYXQiOjE3MTQ5ODMwNTEsImV4cCI6MTcxNTA2OTQ1MX0.89F-1aPi8jUQnf2AB1ZTDFTqtLeJ_1HndKkKZjy7gvk",
+      },
+      body: {
+        configuration: [
+          {
+            users: {
+              rows: 5,
+              returned: true,
+            },
+          },
+          {
+            contacts: {
+              rows: 1,
+              returned: true,
+            },
+          },
+        ],
+        generateWithAi: false,
+      },
     })
       .its("body")
       .should("be.an", "object")
       .and("have.property", "success", true);
+
     cy.reload();
-    cy.wait("@connect");
-    cy.wait("@fetch");
+    // cy.wait("@connect");
+    // cy.wait("@fetch");
 
     cy.get('[aria-label="pagination navigation"]').should("exist");
   });
 
-  it("The pagination component contains one page for 5 people and 2 pages for 10", () => {
+  it("The pagination component contains one page for 5 people and 4 pages for 26", () => {
     const authToken = localStorage.getItem("token");
     expect(authToken).not.to.be.null;
 
@@ -60,20 +89,40 @@ describe("Test Hakkaren API", () => {
       cy.get("ul").children().should("have.length", 3);
     });
 
-    cy.request("POST", "http://localhost:3000/execute", {
-      executeURL,
-      authToken,
-      generateWithAI,
+    cy.request({
+      url: "https://api.dev.app.hakkaren.co/v1/inceptors/663514ada3ff7dfa67ec0448/execute",
+      method: "POST",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWUxZTM3NDEyNDQ2ZTVkNzY0ZjFkYjciLCJpYXQiOjE3MTQ5ODMwNTEsImV4cCI6MTcxNTA2OTQ1MX0.89F-1aPi8jUQnf2AB1ZTDFTqtLeJ_1HndKkKZjy7gvk",
+      },
+      body: {
+        configuration: [
+          {
+            users: {
+              rows: 21,
+              returned: true,
+            },
+          },
+          {
+            contacts: {
+              rows: 1,
+              returned: true,
+            },
+          },
+        ],
+        generateWithAi: false,
+      },
     })
       .its("body")
       .should("be.an", "object")
       .and("have.property", "success", true);
     cy.reload();
-    cy.wait("@connect");
-    cy.wait("@fetch");
+    // cy.wait("@connect");
+    // cy.wait("@fetch");
 
     cy.get('[aria-label="pagination navigation"]').within(() => {
-      cy.get("ul").children().should("have.length", 4);
+      cy.get("ul").children().should("have.length", 6);
     });
   });
 
@@ -83,15 +132,15 @@ describe("Test Hakkaren API", () => {
     cy.get("body").click(0, 0); // click outside
   });
 
-  it("The pagination works: clicking in the second page  button goes to that page", () => {
+  it("The pagination works: clicking the 4 page  button goes to that page", () => {
     cy.get('[aria-label="pagination navigation"]').should("exist");
 
     cy.get(".user-list").children().should("have.length", 8);
 
     cy.get('[aria-label="pagination navigation"]').within(() => {
-      cy.get("ul").children().should("have.length", 4);
+      cy.get("ul").children().should("have.length", 6);
 
-      cy.contains("2").click();
+      cy.contains("4").click();
     });
 
     cy.get(".user-list").children().should("have.length", 2);
@@ -99,7 +148,7 @@ describe("Test Hakkaren API", () => {
 
   it("Can delete one entry", () => {
     cy.get('[aria-label="pagination navigation"]').within(() => {
-      cy.contains("2").click();
+      cy.contains("4").click();
     });
 
     cy.get(".user-list").then(($list) => {

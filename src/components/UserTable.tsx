@@ -172,7 +172,7 @@ const UserTable = ({ users, deleteUser, isFetching }: UserTableParams) => {
   };
 
   const handleDeleteMember = () => {
-    selectedUser && deleteUser(selectedUser?.id);
+    selectedUser && deleteUser(selectedUser?._id);
   };
 
   if (isFetching)

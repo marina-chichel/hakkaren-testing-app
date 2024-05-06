@@ -9,18 +9,8 @@ import {
 
 const CARDS_ON_PAGE = 8;
 
-type UserResp = {
-  _id: string;
-  email: string;
-  disabled: string;
-  profile: { language: string; timezone: string };
-  notification: { disabled: boolean; frequency: string };
-  secure: { _id: string };
-  team: string;
-}[];
-
 export type User = {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   position: string;
@@ -193,7 +183,7 @@ const useAPI = () => {
   };
 
   const deleteUser = (userId: string) => {
-    setUsers((curr) => curr.filter((user) => user.id !== userId));
+    setUsers((curr) => curr.filter((user) => user._id !== userId));
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
