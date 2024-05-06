@@ -19,7 +19,10 @@ const UserGraph: React.FC<UserGraphProps> = ({ users }) => {
     factor,
     "Hourly rate": userCount[factor],
   }));
-  const xAxisTicks = [data[0].factor, data[data.length - 1].factor];
+  const xAxisTicks =
+    data.length === 1
+      ? [data[0].factor]
+      : [data[0].factor, data[data.length - 1].factor];
   return (
     <>
       <Typography variant="body1">Hourly rate</Typography>
