@@ -18,9 +18,7 @@ const useContacts = (id: string) => {
         },
       });
       const data = await response.json();
-
-      const contacts = data.processes.map((p: any) => p.name);
-      setContacts(contacts);
+      setContacts(data.emails);
     } catch (error) {
       setError("Couldn't fetch contacts");
       setContacts([]);

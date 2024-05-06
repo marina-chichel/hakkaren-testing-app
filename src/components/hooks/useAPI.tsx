@@ -84,32 +84,15 @@ const useAPI = () => {
     return num;
   }
 
-  const transformUsers = (users: UserResp) => {
+  const transformUsers = (users: User[]) => {
     console.log({ users });
 
     return users.map((user) => ({
-      id: user._id,
-      name: user.email
-        .split("@")[0]
-        .replace(/\d/g, "")
-        .split(/[._]/)
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(" "),
-      email: user.email.toLowerCase(),
-      position: user.profile.language,
-      color: user.team,
-
-      company: user.profile.timezone,
-      date: !isNaN(Date.parse(user.disabled))
-        ? new Date(user.disabled).toLocaleDateString("en-US")
-        : user.disabled,
-      time: !isNaN(Date.parse(user.disabled))
-        ? new Date(user.disabled).toLocaleTimeString("en-US")
-        : user.disabled,
+      ...user,
+      date: !isNaN(Date.parse(user.date))
+        ? new Date(user.date).toLocaleDateString("en-US")
+        : user.date,
       rate: biasedRandom(),
-      success: user?.notification?.disabled,
-      avatar: user?.notification?.frequency,
-      contactsId: user?.secure?._id,
     }));
   };
 
