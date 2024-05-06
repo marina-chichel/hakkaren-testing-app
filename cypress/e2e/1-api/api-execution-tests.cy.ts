@@ -16,10 +16,7 @@ describe("Test Hakkaren API", () => {
     // cy.pause();
   });
 
-  it("The pagination component does not exist when the list is empty, and appears when it is full", () => {
-    const authToken = localStorage.getItem("token");
-    expect(authToken).not.to.be.null;
-
+  it("When there is no one in the list then the empty state component is visible", () => {
     // delete all people
     cy.request({
       url: "https://api.dev.app.hakkaren.co/v1/projects/663514aba3ff7dfa67ec0405/databases/reset",
@@ -37,10 +34,13 @@ describe("Test Hakkaren API", () => {
       .and("have.property", "success", true);
 
     cy.reload();
-    // cy.wait("@connect");
-    // cy.wait("@fetch");
+    cy.wait("@connect");
+    cy.wait("@fetch");
 
     cy.contains("NO RECORDS FOUND").should("exist");
+  });
+
+  it("The pagination component does not exist when the list is empty, and appears when it is full", () => {
     cy.get('[aria-label="pagination navigation"]').should("not.exist");
 
     // add 5 people
@@ -74,8 +74,8 @@ describe("Test Hakkaren API", () => {
       .and("have.property", "success", true);
 
     cy.reload();
-    // cy.wait("@connect");
-    // cy.wait("@fetch");
+    cy.wait("@connect");
+    cy.wait("@fetch");
 
     cy.get('[aria-label="pagination navigation"]').should("exist");
   });
@@ -118,8 +118,8 @@ describe("Test Hakkaren API", () => {
       .should("be.an", "object")
       .and("have.property", "success", true);
     cy.reload();
-    // cy.wait("@connect");
-    // cy.wait("@fetch");
+    cy.wait("@connect");
+    cy.wait("@fetch");
 
     cy.get('[aria-label="pagination navigation"]').within(() => {
       cy.get("ul").children().should("have.length", 6);
